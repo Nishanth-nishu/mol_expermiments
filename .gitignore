@@ -38,3 +38,15 @@ logs/*.log
 # ── nohup / temp ─────────────────────────────────────────────────────────────
 nohup.out
 *.tmp
+
+# ── Generated molecules (large, regenerate via mol_infer.py) ─────────────────
+generated/*/mol_*.pdb
+generated/*/mol_*.mol2
+generated/*/invalid_*.pdb
+generated/*/molecules.sdf
+
+# ── Keep: summary.json per experiment (small, important for results) ─────────
+!generated/*/summary.json
+
+# ── Keep: visualization plots (committed for GitHub display) ─────────────────
+!visualization/plots/*.png

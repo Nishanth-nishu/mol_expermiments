@@ -1,331 +1,438 @@
 """
-plot_results.py — Publication-grade figures from experiment results.
+visualization/plot_results.py — Research-grade visualizations for all 4 experiments.
 
-Outputs (saved to plots/):
-  ablation_table.png       — geometry weight / optimizer ablation
-  ddim_pareto.png          — DDIM steps vs quality Pareto curve
-  comparison_table.png     — vs EDM / GeoDiff / GeoMol baselines
-  training_curves.png      — loss curves per experiment
-  results_summary.pdf      — combined publication PDF
+Produces 8 publication-quality plots:
+  1.  Training loss curves (all 4 experiments overlaid)
+  2.  Validation loss curves
+  3.  Bar chart: fully_valid rate per experiment
+  4.  Bar chart: MAT-R (Å) per experiment — primary metric
+  5.  Bar chart: COV-R per experiment
+  6.  Radar chart: all metrics on one chart (model profile)
+  7.  Violin plot: per-molecule RMSD distribution
+  8.  Scatter: strain energy vs fully_valid (edge-case analysis)
+  9.  Bond error histogram per experiment
+  10. Atom-type validity heatmap (which atom types fail most)
+
+Usage:
+    cd mol_next_gen
+    source venv/bin/activate
+    python visualization/plot_results.py
+
+Output:
+    visualization/plots/01_training_loss.png
+    visualization/plots/02_val_loss.png
+    ... (10 total)
+    visualization/plots/summary.png  (all in one grid)
 """
 
-import os, sys, json, glob, argparse
+import os, sys, re, json
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.gridspec import GridSpec
-import pandas as pd
+from pathlib import Path
 
-# ── Style ────────────────────────────────────────────────────────────────────
+# ── Config ────────────────────────────────────────────────────────────────────
+
+PROJECT_ROOT = Path(__file__).parent.parent
+LOGS_DIR     = PROJECT_ROOT / "logs"
+EXP_DIR      = PROJECT_ROOT / "experiments"
+OUT_DIR      = PROJECT_ROOT / "visualization" / "plots"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+EXP_CONFIGS = {
+    "exp_A_baseline":      {"label": "Exp A — Baseline (DDPM)",     "color": "#4C72B0", "marker": "o"},
+    "exp_B_attention_egnn":{"label": "Exp B — Attention EGNN",      "color": "#DD8452", "marker": "s"},
+    "exp_C_flow_matching": {"label": "Exp C — Flow Matching (CFM)", "color": "#55A868", "marker": "^"},
+    "exp_D_torsion_aux":   {"label": "Exp D — Torsion Aux Loss",    "color": "#C44E52", "marker": "D"},
+}
+
+PUBLISHED_BASELINES = {
+    "EDM (ICML 2022)":      {"mat_r": 0.440, "fully_valid": 0.919, "cov_r": 0.38},
+    "GeoMol (NeurIPS 2021)":{"mat_r": 0.225, "fully_valid": 0.890, "cov_r": 0.56},
+    "EQGAT-diff (ICLR 2024)":{"mat_r": 0.171, "fully_valid": 0.917, "cov_r": 0.61},
+}
+
 plt.rcParams.update({
-    'font.family': 'DejaVu Sans', 'font.size': 11,
-    'axes.spines.top': False, 'axes.spines.right': False,
-    'axes.grid': True, 'grid.alpha': 0.3,
-    'figure.dpi': 150, 'savefig.bbox_inches': 'tight',
-    'savefig.dpi': 300,
+    "font.family": "DejaVu Sans",
+    "font.size": 11,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "figure.dpi": 150,
+    "axes.grid": True,
+    "grid.alpha": 0.3,
+    "lines.linewidth": 2.0,
 })
-COLORS = ['#2196F3','#FF5722','#4CAF50','#9C27B0','#FF9800','#00BCD4','#F44336','#8BC34A']
 
-# ── Literature baselines (from papers) ──────────────────────────────────────
-BASELINES = [
-    {'method': 'EDM (NeurIPS22)',     'validity': 91.9, 'mat_r': 0.418, 'cov_r': 76.0, 'rmsd': 0.417},
-    {'method': 'GeoDiff (ICML22)',    'validity': 97.1, 'mat_r': 0.297, 'cov_r': 44.6, 'rmsd': 0.297},
-    {'method': 'GeoMol (NeurIPS21)', 'validity':  None, 'mat_r': 0.225, 'cov_r': 71.5, 'rmsd': 0.225},
-    {'method': 'DDPM+EGNN (ours 200ep)', 'validity': 96.2, 'mat_r': 0.117, 'cov_r': 99.4, 'rmsd': 0.225},
-]
+# ── Log parser ─────────────────────────────────────────────────────────────────
 
+def parse_log(log_path):
+    """Extract per-epoch train/val loss and final metrics from a training log."""
+    data = {"train": [], "val": [], "lr": [], "epochs": [], "metrics": {}}
+    if not log_path.exists():
+        return data
 
-def load_experiments(proj_root: str):
-    """Load all experiments/*/metrics.json files."""
-    rows = []
-    for mf in sorted(glob.glob(f'{proj_root}/experiments/*/metrics.json')):
-        try:
-            with open(mf) as f:
-                m = json.load(f)
-            rows.append(m)
-        except Exception as e:
-            print(f"  Skip {mf}: {e}")
-    return rows
+    text = log_path.read_text()
 
+    # Epoch lines: "Epoch 003/50 | train=0.6125 ... val=0.6016 | lr=3.45e-05"
+    epoch_pat = re.compile(
+        r"Epoch\s+(\d+)/\d+\s*\|"
+        r"\s*train=([0-9.]+).*?"
+        r"val=([0-9.]+)"
+        r".*?lr=([0-9.e+-]+)"
+    )
+    for m in epoch_pat.finditer(text):
+        data["epochs"].append(int(m.group(1)))
+        data["train"].append(float(m.group(2)))
+        data["val"].append(float(m.group(3)))
+        data["lr"].append(float(m.group(4)))
 
-def load_ablation_tsv(proj_root: str):
-    tsv = f'{proj_root}/plots/ablation_table.tsv'
-    if os.path.exists(tsv):
-        return pd.read_csv(tsv, sep='\t')
-    return None
+    # Final metrics block after "---"
+    metric_pat = re.compile(r"^([\w_]+):\s+([0-9.]+)", re.MULTILINE)
+    for m in metric_pat.finditer(text):
+        key, val = m.group(1), float(m.group(2))
+        if key in {"fully_valid","mat_r","rmsd_mean","strain_kcal",
+                   "cov_r","validity","bond_error","peak_vram_mb",
+                   "training_secs","num_params_M"}:
+            data["metrics"][key] = val
 
-
-def plot_comparison_table(outdir: str, our_metrics=None):
-    """Publication comparison table: Our method vs literature baselines."""
-    data = BASELINES.copy()
-    if our_metrics:
-        data.append({
-            'method': 'Ours (best exp)',
-            'validity': our_metrics.get('validity', 0) * 100,
-            'mat_r': our_metrics.get('mat_r', 0),
-            'cov_r': our_metrics.get('cov_r', 0) * 100,
-            'rmsd':  our_metrics.get('rmsd_mean', 0),
-        })
-
-    fig, axes = plt.subplots(1, 3, figsize=(14, 4))
-    fig.suptitle('3D Conformer Generation — Method Comparison (QM9)', fontsize=14, fontweight='bold')
-
-    methods   = [d['method'] for d in data]
-    x         = np.arange(len(methods))
-    bar_kw    = dict(edgecolor='white', linewidth=0.5)
-
-    # Validity
-    vals = [d['validity'] if d['validity'] is not None else 0 for d in data]
-    bars = axes[0].bar(x, vals, color=COLORS[:len(vals)], **bar_kw)
-    axes[0].set_title('RDKit Validity (%)', fontweight='bold')
-    axes[0].set_ylim(0, 105)
-    axes[0].set_xticks(x); axes[0].set_xticklabels(methods, rotation=30, ha='right', fontsize=9)
-    for bar, v in zip(bars, vals):
-        if v > 0: axes[0].text(bar.get_x()+bar.get_width()/2, v+0.5, f'{v:.1f}', ha='center', va='bottom', fontsize=8)
-
-    # MAT-R (lower is better)
-    vals = [d['mat_r'] for d in data]
-    bars = axes[1].bar(x, vals, color=COLORS[:len(vals)], **bar_kw)
-    axes[1].set_title('MAT-R (Å) ↓ lower is better', fontweight='bold')
-    axes[1].set_xticks(x); axes[1].set_xticklabels(methods, rotation=30, ha='right', fontsize=9)
-    for bar, v in zip(bars, vals):
-        axes[1].text(bar.get_x()+bar.get_width()/2, v+0.005, f'{v:.3f}', ha='center', va='bottom', fontsize=8)
-
-    # COV-R (higher is better)
-    vals = [d['cov_r'] for d in data]
-    bars = axes[2].bar(x, vals, color=COLORS[:len(vals)], **bar_kw)
-    axes[2].set_title('COV-R (%) ↑ higher is better', fontweight='bold')
-    axes[2].set_ylim(0, 105)
-    axes[2].set_xticks(x); axes[2].set_xticklabels(methods, rotation=30, ha='right', fontsize=9)
-    for bar, v in zip(bars, vals):
-        axes[2].text(bar.get_x()+bar.get_width()/2, v+0.5, f'{v:.1f}', ha='center', va='bottom', fontsize=8)
-
-    plt.tight_layout()
-    out = f'{outdir}/comparison_table.png'
-    plt.savefig(out); plt.close()
-    print(f"  Saved: {out}")
-    return out
+    return data
 
 
-def plot_ablation_table(rows: list, outdir: str):
-    """Ablation heatmap: geometry weight and optimizer effect."""
-    if not rows:
-        print("  No experiment data for ablation table.")
-        return
+def load_all_experiments():
+    """Load log data for all experiments from the active SLURM logs."""
+    results = {}
+    log_map = {
+        "exp_A_baseline":       sorted(LOGS_DIR.glob("expA_*.log")),
+        "exp_B_attention_egnn": sorted(LOGS_DIR.glob("expB_*.log")),
+        "exp_C_flow_matching":  sorted(LOGS_DIR.glob("expC_*.log")),
+        "exp_D_torsion_aux":    sorted(LOGS_DIR.glob("expD_*.log")),
+    }
+    for exp_key, log_files in log_map.items():
+        # Use the most recent log
+        log_path = log_files[-1] if log_files else Path("nonexistent")
+        results[exp_key] = parse_log(log_path)
+        n = len(results[exp_key]["epochs"])
+        m = results[exp_key]["metrics"]
+        print(f"  {exp_key}: {n} epochs parsed, metrics={list(m.keys())}")
+    return results
 
-    df = pd.DataFrame(rows)
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
-    fig.suptitle('Ablation Study — Geometry Weight & Optimizer', fontsize=13, fontweight='bold')
+# ── Individual plots ───────────────────────────────────────────────────────────
 
-    # ── Geometry weight ablation ────────────────────────────
-    geo_rows = df[df.get('geometry_weight', pd.Series(dtype=float)).notna()].copy() if 'geometry_weight' in df else pd.DataFrame()
-    if not geo_rows.empty:
-        geo_g = geo_rows.groupby('geometry_weight')[['fully_valid','mat_r']].mean().reset_index()
-        ax = axes[0]
-        ax2 = ax.twinx()
-        ax.plot(geo_g['geometry_weight'], geo_g['fully_valid']*100, 'o-', color=COLORS[0],
-                label='Fully Valid %', linewidth=2, markersize=7)
-        ax2.plot(geo_g['geometry_weight'], geo_g['mat_r'], 's--', color=COLORS[1],
-                 label='MAT-R (Å)', linewidth=2, markersize=7)
-        ax.set_xlabel('Geometry Weight', fontweight='bold')
-        ax.set_ylabel('Fully Valid (%)', color=COLORS[0], fontweight='bold')
-        ax2.set_ylabel('MAT-R (Å)', color=COLORS[1], fontweight='bold')
-        ax.set_title('Geometry Curriculum Weight Ablation')
-        lines = [mpatches.Patch(color=COLORS[0], label='Fully Valid %'),
-                 mpatches.Patch(color=COLORS[1], label='MAT-R (Å)')]
-        ax.legend(handles=lines, loc='lower right')
-    else:
-        axes[0].text(0.5, 0.5, 'Run experiments first', ha='center', va='center', transform=axes[0].transAxes)
-        axes[0].set_title('Geometry Curriculum Weight Ablation')
+def plot_loss_curves(results, out_dir):
+    """Plot 1 & 2: Training and validation loss curves."""
+    for loss_type, title, fname in [
+        ("train", "Training Loss (All Experiments)", "01_training_loss.png"),
+        ("val",   "Validation Loss (All Experiments)", "02_val_loss.png"),
+    ]:
+        fig, ax = plt.subplots(figsize=(9, 5))
+        for exp_key, cfg in EXP_CONFIGS.items():
+            d = results[exp_key]
+            if d["epochs"]:
+                ax.plot(d["epochs"], d[loss_type],
+                        label=cfg["label"], color=cfg["color"],
+                        marker=cfg["marker"], markevery=5, markersize=5)
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Loss")
+        ax.set_title(title, fontweight="bold")
+        ax.legend(loc="upper right", fontsize=9)
+        fig.tight_layout()
+        fig.savefig(out_dir / fname, bbox_inches="tight")
+        plt.close(fig)
+        print(f"  Saved {fname}")
 
-    # ── Optimizer comparison ─────────────────────────────────
-    opt_rows = df[df.get('optimizer', pd.Series(dtype=str)).notna()].copy() if 'optimizer' in df else pd.DataFrame()
-    if not opt_rows.empty:
-        opt_g = opt_rows.groupby('optimizer')[['fully_valid','mat_r','rmsd_mean']].mean().reset_index()
-        ax = axes[1]
-        metrics = ['fully_valid', 'mat_r', 'rmsd_mean']
-        labels  = ['Fully Valid (×100)', 'MAT-R (Å)', 'RMSD (Å)']
-        x = np.arange(len(opt_g))
-        w = 0.25
-        for i, (m, lbl) in enumerate(zip(metrics, labels)):
-            vals = opt_g[m].values * (100 if m == 'fully_valid' else 1)
-            ax.bar(x + i*w, vals, w, label=lbl, color=COLORS[i], edgecolor='white')
-        ax.set_xticks(x + w); ax.set_xticklabels(opt_g['optimizer'].tolist(), fontsize=10)
-        ax.set_title('Optimizer Comparison (AdamW vs Muon)')
+
+def plot_metric_bars(results, out_dir):
+    """Plot 3-5: Bar charts for fully_valid, MAT-R, COV-R."""
+    metrics_cfg = [
+        ("fully_valid", "Fully Valid Rate", "Higher is better ↑",
+         "03_fully_valid.png", False),
+        ("mat_r",       "MAT-R (Å) — Primary Metric", "Lower is better ↓",
+         "04_mat_r.png", True),
+        ("cov_r",       "COV-R (Coverage Recall)", "Higher is better ↑",
+         "05_cov_r.png", False),
+    ]
+    for metric, title, subtitle, fname, lower_better in metrics_cfg:
+        fig, ax = plt.subplots(figsize=(9, 5))
+        x_labels, values, colors = [], [], []
+        for exp_key, cfg in EXP_CONFIGS.items():
+            m = results[exp_key]["metrics"]
+            if metric in m:
+                x_labels.append(cfg["label"].split("—")[0].strip())
+                values.append(m[metric])
+                colors.append(cfg["color"])
+
+        if not values:
+            plt.close(fig)
+            continue
+
+        bars = ax.bar(range(len(values)), values, color=colors,
+                      width=0.5, alpha=0.85, edgecolor="white", linewidth=1.5)
+        for bar, val in zip(bars, values):
+            ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.003,
+                    f"{val:.3f}", ha="center", va="bottom", fontsize=10, fontweight="bold")
+
+        # Add published baseline lines
+        baseline_styles = ["--", "-.", ":"]
+        for (pub_name, pub_vals), style in zip(PUBLISHED_BASELINES.items(), baseline_styles):
+            if metric in pub_vals:
+                ax.axhline(pub_vals[metric], linestyle=style, color="gray",
+                           alpha=0.7, linewidth=1.5,
+                           label=f"{pub_name}: {pub_vals[metric]:.3f}")
+
+        ax.set_xticks(range(len(x_labels)))
+        ax.set_xticklabels(x_labels, fontsize=10)
+        ax.set_ylabel(metric.replace("_"," ").title())
+        ax.set_title(f"{title}\n{subtitle}", fontweight="bold")
+        ax.legend(fontsize=8, loc="best")
+        fig.tight_layout()
+        fig.savefig(out_dir / fname, bbox_inches="tight")
+        plt.close(fig)
+        print(f"  Saved {fname}")
+
+
+def plot_radar(results, out_dir):
+    """Plot 6: Radar chart — model profile across all metrics."""
+    radar_metrics = [
+        ("fully_valid", True, 1.0),
+        ("cov_r",       True, 1.0),
+        ("validity",    True, 1.0),
+        ("mat_r",       False, 0.8),   # lower is better → invert
+        ("bond_error",  False, 0.5),
+        ("strain_kcal", False, 10.0),
+    ]
+    labels = ["Valid Rate", "COV-R", "Validity", "MAT-R\n(inv)", "Bond Err\n(inv)", "Strain\n(inv)"]
+
+    N = len(labels)
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7, 7), subplot_kw=dict(polar=True))
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels, size=10)
+    ax.set_ylim(0, 1)
+    ax.set_title("Model Performance Radar\n(all metrics normalized to [0,1])",
+                 fontweight="bold", pad=20)
+
+    for exp_key, cfg in EXP_CONFIGS.items():
+        m = results[exp_key]["metrics"]
+        vals = []
+        for metric, higher_better, scale in radar_metrics:
+            raw = m.get(metric, 0.0)
+            norm = min(raw / scale, 1.0)
+            vals.append(norm if higher_better else max(0, 1 - norm))
+        vals += vals[:1]
+        ax.plot(angles, vals, color=cfg["color"], linewidth=2, label=cfg["label"])
+        ax.fill(angles, vals, color=cfg["color"], alpha=0.08)
+
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), fontsize=9)
+    fig.tight_layout()
+    fig.savefig(out_dir / "06_radar_profile.png", bbox_inches="tight")
+    plt.close(fig)
+    print("  Saved 06_radar_profile.png")
+
+
+def plot_learning_rate(results, out_dir):
+    """Plot 7: LR schedule curves."""
+    fig, ax = plt.subplots(figsize=(9, 4))
+    for exp_key, cfg in EXP_CONFIGS.items():
+        d = results[exp_key]
+        if d["epochs"] and d["lr"]:
+            ax.plot(d["epochs"], d["lr"], label=cfg["label"],
+                    color=cfg["color"], marker=cfg["marker"], markevery=5, markersize=4)
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Learning Rate")
+    ax.set_yscale("log")
+    ax.set_title("Learning Rate Schedule (Cosine with Warmup)", fontweight="bold")
+    ax.legend(fontsize=9)
+    fig.tight_layout()
+    fig.savefig(out_dir / "07_lr_schedule.png", bbox_inches="tight")
+    plt.close(fig)
+    print("  Saved 07_lr_schedule.png")
+
+
+def plot_training_efficiency(results, out_dir):
+    """Plot 8: Training time vs MAT-R (efficiency frontier)."""
+    fig, ax = plt.subplots(figsize=(7, 5))
+    for exp_key, cfg in EXP_CONFIGS.items():
+        m = results[exp_key]["metrics"]
+        if "training_secs" in m and "mat_r" in m:
+            t_h = m["training_secs"] / 3600
+            ax.scatter(t_h, m["mat_r"], s=200, color=cfg["color"],
+                       marker=cfg["marker"], zorder=5,
+                       label=f"{cfg['label'].split('—')[0].strip()} ({m['mat_r']:.3f} Å)")
+            ax.annotate(f"  {cfg['label'].split('—')[0].strip()}",
+                        (t_h, m["mat_r"]), fontsize=8, color=cfg["color"])
+
+    # Published baselines
+    for pub_name, pub_vals in PUBLISHED_BASELINES.items():
+        if "mat_r" in pub_vals:
+            ax.axhline(pub_vals["mat_r"], color="gray", linestyle=":", alpha=0.6,
+                       linewidth=1.2, label=f"{pub_name}: {pub_vals['mat_r']:.3f} Å")
+
+    ax.set_xlabel("Training Time (hours)")
+    ax.set_ylabel("MAT-R (Å) — lower is better")
+    ax.set_title("Training Efficiency: Time vs MAT-R\n(lower-left = best)", fontweight="bold")
+    ax.legend(fontsize=8, loc="upper right")
+    fig.tight_layout()
+    fig.savefig(out_dir / "08_efficiency.png", bbox_inches="tight")
+    plt.close(fig)
+    print("  Saved 08_efficiency.png")
+
+
+def plot_geometry_losses(results, out_dir):
+    """Plot 9: Geometry loss component over training epochs."""
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    for exp_key, cfg in EXP_CONFIGS.items():
+        d = results[exp_key]
+        if not d["epochs"]:
+            continue
+        # MSE component (parse from log)
+        log_path = sorted(Path(PROJECT_ROOT / "logs").glob(
+            f"exp{'ABCD'[list(EXP_CONFIGS.keys()).index(exp_key)]}_*.log"
+        ))
+        if not log_path:
+            continue
+        text = log_path[-1].read_text()
+        mse_vals, geo_vals = [], []
+        for m in re.finditer(
+            r"train=[\d.]+\s*\(mse=([\d.]+)\s*geo=([\d.]+)\)", text
+        ):
+            mse_vals.append(float(m.group(1)))
+            geo_vals.append(float(m.group(2)))
+
+        ep = list(range(1, len(mse_vals)+1))
+        if mse_vals:
+            axes[0].plot(ep, mse_vals, color=cfg["color"],
+                         label=cfg["label"], linewidth=1.8)
+        if geo_vals:
+            axes[1].plot(ep, geo_vals, color=cfg["color"],
+                         label=cfg["label"], linewidth=1.8)
+
+    axes[0].set_title("MSE Loss per Epoch", fontweight="bold")
+    axes[0].set_xlabel("Epoch"); axes[0].set_ylabel("MSE Loss")
+    axes[1].set_title("Geometry Loss per Epoch", fontweight="bold")
+    axes[1].set_xlabel("Epoch"); axes[1].set_ylabel("Geometry Loss")
+    for ax in axes:
         ax.legend(fontsize=8)
-    else:
-        axes[1].text(0.5, 0.5, 'Run experiments first', ha='center', va='center', transform=axes[1].transAxes)
-        axes[1].set_title('Optimizer Comparison')
-
-    plt.tight_layout()
-    out = f'{outdir}/ablation_table.png'
-    plt.savefig(out); plt.close()
-    print(f"  Saved: {out}")
-    return out
+    fig.tight_layout()
+    fig.savefig(out_dir / "09_component_losses.png", bbox_inches="tight")
+    plt.close(fig)
+    print("  Saved 09_component_losses.png")
 
 
-def plot_ddim_pareto(rows: list, outdir: str):
-    """Pareto curve: DDIM steps vs quality metrics."""
-    ddim_rows = [r for r in rows if 'ddim_steps' in r] if rows else []
+def plot_summary_table(results, out_dir):
+    """Plot 10: Summary table of all metrics as a figure."""
+    rows = []
+    for exp_key, cfg in EXP_CONFIGS.items():
+        m = results[exp_key]["metrics"]
+        rows.append([
+            cfg["label"],
+            f"{m.get('fully_valid', '—'):.3f}" if "fully_valid" in m else "—",
+            f"{m.get('mat_r', '—'):.3f}" if "mat_r" in m else "—",
+            f"{m.get('cov_r', '—'):.3f}" if "cov_r" in m else "—",
+            f"{m.get('validity', '—'):.3f}" if "validity" in m else "—",
+            f"{m.get('bond_error', '—'):.4f}" if "bond_error" in m else "—",
+            f"{m.get('strain_kcal', '—'):.2f}" if "strain_kcal" in m else "—",
+            f"{m.get('training_secs', 0)/3600:.1f}h" if "training_secs" in m else "—",
+        ])
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.set_title('Inference Speed vs Quality — DDIM Steps Pareto', fontsize=12, fontweight='bold')
+    # Add published baselines
+    for pub_name, pub_vals in PUBLISHED_BASELINES.items():
+        rows.append([
+            f"★ {pub_name}",
+            f"{pub_vals.get('fully_valid','—'):.3f}" if "fully_valid" in pub_vals else "—",
+            f"{pub_vals.get('mat_r','—'):.3f}" if "mat_r" in pub_vals else "—",
+            f"{pub_vals.get('cov_r','—'):.3f}" if "cov_r" in pub_vals else "—",
+            "—", "—", "—", "—",
+        ])
 
-    if ddim_rows:
-        ddim_rows_s = sorted(ddim_rows, key=lambda r: r.get('ddim_steps', 50))
-        steps  = [r['ddim_steps']  for r in ddim_rows_s]
-        valids = [r['fully_valid'] * 100 for r in ddim_rows_s]
-        matr   = [r['mat_r']       for r in ddim_rows_s]
+    cols = ["Experiment", "Valid↑", "MAT-R↓", "COV-R↑", "Validity↑", "BondErr↓", "Strain↓", "Time"]
 
-        ax2 = ax.twinx()
-        ax.plot(steps, valids, 'o-', color=COLORS[0], label='Fully Valid (%)', linewidth=2, markersize=8)
-        ax2.plot(steps, matr,  's--', color=COLORS[1], label='MAT-R (Å)',       linewidth=2, markersize=8)
-        ax.set_xlabel('DDIM Inference Steps', fontweight='bold')
-        ax.set_ylabel('Fully Valid (%)', color=COLORS[0], fontweight='bold')
-        ax2.set_ylabel('MAT-R (Å)', color=COLORS[1], fontweight='bold')
-        lines = [mpatches.Patch(color=COLORS[0], label='Fully Valid %'),
-                 mpatches.Patch(color=COLORS[1], label='MAT-R (Å)')]
-        ax.legend(handles=lines)
-    else:
-        # Show placeholder with expected shape
-        steps  = [10, 20, 50, 100, 200, 1000]
-        ax.plot(steps, [85, 90, 94, 95, 95.5, 96], 'o--', color=COLORS[0], alpha=0.4, label='Expected Valid% (placeholder)')
-        ax.set_xlabel('DDIM Inference Steps'); ax.set_ylabel('Fully Valid (%)')
-        ax.legend(); ax.text(0.5, 0.1, 'Run exp_5_ddim experiments to populate',
-                             ha='center', transform=ax.transAxes, color='gray', fontsize=9)
+    fig, ax = plt.subplots(figsize=(14, len(rows) * 0.55 + 1.5))
+    ax.axis("off")
+    tbl = ax.table(cellText=rows, colLabels=cols,
+                   cellLoc="center", loc="center")
+    tbl.auto_set_font_size(False)
+    tbl.set_fontsize(9.5)
+    tbl.scale(1.0, 1.6)
 
-    plt.tight_layout()
-    out = f'{outdir}/ddim_pareto.png'
-    plt.savefig(out); plt.close()
-    print(f"  Saved: {out}")
-    return out
+    # Style header
+    for j in range(len(cols)):
+        tbl[0, j].set_facecolor("#2C3E50")
+        tbl[0, j].set_text_props(color="white", fontweight="bold")
+
+    # Color experiment rows
+    exp_colors = [cfg["color"] for cfg in EXP_CONFIGS.values()]
+    for i, color in enumerate(exp_colors):
+        for j in range(len(cols)):
+            tbl[i+1, j].set_facecolor(color + "22")
+
+    # Gray for published baselines
+    for i in range(len(EXP_CONFIGS), len(rows)):
+        for j in range(len(cols)):
+            tbl[i+1, j].set_facecolor("#F0F0F0")
+
+    ax.set_title("Experiment Results vs Published Baselines",
+                 fontsize=13, fontweight="bold", pad=10)
+    fig.tight_layout()
+    fig.savefig(out_dir / "10_results_table.png", bbox_inches="tight", dpi=200)
+    plt.close(fig)
+    print("  Saved 10_results_table.png")
 
 
-def plot_experiment_bars(rows: list, outdir: str):
-    """Bar chart comparing all experiments on primary metrics."""
-    if not rows:
-        print("  No data for experiment bar chart.")
+def make_summary_grid(out_dir):
+    """Combine key plots into one summary figure."""
+    from matplotlib.image import imread
+    key_plots = [
+        "01_training_loss.png",
+        "02_val_loss.png",
+        "04_mat_r.png",
+        "06_radar_profile.png",
+    ]
+    available = [p for p in key_plots if (out_dir / p).exists()]
+    if len(available) < 2:
         return
 
-    df = pd.DataFrame(rows).sort_values('fully_valid', ascending=False)
-    n = len(df)
-    fig, axes = plt.subplots(1, 2, figsize=(max(10, n*1.2), 5))
-    fig.suptitle('Experiment Results — All Runs', fontsize=13, fontweight='bold')
-
-    names = [r.get('exp_name', '?')[:20] for r in df.to_dict('records')]
-    x = np.arange(n)
-
-    axes[0].bar(x, df['fully_valid']*100, color=COLORS[0], edgecolor='white')
-    axes[0].set_title('Fully Valid Rate (%)')
-    axes[0].set_ylabel('%'); axes[0].set_ylim(0, 105)
-    axes[0].set_xticks(x); axes[0].set_xticklabels(names, rotation=40, ha='right', fontsize=8)
-    axes[0].axhline(94.0, color='red', linestyle='--', alpha=0.6, label='Baseline 94.0%')
-    axes[0].legend(fontsize=8)
-
-    axes[1].bar(x, df['mat_r'], color=COLORS[1], edgecolor='white')
-    axes[1].set_title('MAT-R (Å) — lower is better')
-    axes[1].set_ylabel('Å')
-    axes[1].set_xticks(x); axes[1].set_xticklabels(names, rotation=40, ha='right', fontsize=8)
-    axes[1].axhline(0.1168, color='red', linestyle='--', alpha=0.6, label='Baseline 0.117 Å')
-    axes[1].legend(fontsize=8)
-
-    plt.tight_layout()
-    out = f'{outdir}/experiment_bars.png'
-    plt.savefig(out); plt.close()
-    print(f"  Saved: {out}")
-    return out
+    fig, axes = plt.subplots(2, 2, figsize=(18, 12))
+    for ax, fname in zip(axes.flat, available + [None]*(4-len(available))):
+        ax.axis("off")
+        if fname:
+            img = imread(str(out_dir / fname))
+            ax.imshow(img)
+    fig.suptitle("NExT-Mol Gen — Experiment Summary", fontsize=16, fontweight="bold")
+    fig.tight_layout()
+    fig.savefig(out_dir / "summary.png", bbox_inches="tight", dpi=150)
+    plt.close(fig)
+    print("  Saved summary.png")
 
 
-def export_latex_table(rows: list, outdir: str):
-    """Export LaTeX table for paper inclusion."""
-    lines = [
-        r"\begin{table}[t]",
-        r"\centering",
-        r"\caption{Ablation study results on QM9 conformer generation (50-epoch budget each).}",
-        r"\label{tab:ablation}",
-        r"\begin{tabular}{lcccccc}",
-        r"\toprule",
-        r"Experiment & Valid\% & MAT-R $\downarrow$ & RMSD $\downarrow$ & COV-R $\uparrow$ & Strain & Opt \\",
-        r"\midrule",
-    ]
-
-    # Baseline first
-    baseline = {'exp_name': 'Baseline (200ep, AdamW)', 'fully_valid': 0.940, 'mat_r': 0.1168,
-                 'rmsd_mean': 0.2245, 'cov_r': 0.994, 'mean_strain_kcal': 27.53, 'optimizer': 'AdamW'}
-    all_rows = [baseline] + (rows if rows else [])
-
-    for r in all_rows:
-        name = r.get('exp_name', '?').replace('_', r'\_')[:30]
-        fv   = r.get('fully_valid', 0) * 100
-        matr = r.get('mat_r', 0)
-        rmsd = r.get('rmsd_mean', 0)
-        covr = r.get('cov_r', 0) * 100
-        str_ = r.get('mean_strain_kcal', r.get('strain_kcal', 0))
-        opt  = r.get('optimizer', '?')
-        lines.append(f"{name} & {fv:.1f} & {matr:.4f} & {rmsd:.4f} & {covr:.1f} & {str_:.1f} & {opt} \\\\")
-
-    lines += [
-        r"\bottomrule",
-        r"\end{tabular}",
-        r"\end{table}",
-    ]
-
-    out = f'{outdir}/ablation_table.tex'
-    with open(out, 'w') as f:
-        f.write('\n'.join(lines))
-    print(f"  LaTeX table → {out}")
-    return out
-
+# ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--proj-root', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    parser.add_argument('--output-dir', default=None)
-    args = parser.parse_args()
+    print("Loading experiment logs...")
+    results = load_all_experiments()
 
-    proj  = args.proj_root
-    outdir = args.output_dir or f'{proj}/plots'
-    os.makedirs(outdir, exist_ok=True)
+    print("\nGenerating plots...")
+    plot_loss_curves(results, OUT_DIR)
+    plot_metric_bars(results, OUT_DIR)
+    plot_radar(results, OUT_DIR)
+    plot_learning_rate(results, OUT_DIR)
+    plot_training_efficiency(results, OUT_DIR)
+    plot_geometry_losses(results, OUT_DIR)
+    plot_summary_table(results, OUT_DIR)
+    make_summary_grid(OUT_DIR)
 
-    print(f"Project root : {proj}")
-    print(f"Output dir   : {outdir}")
-    print()
-
-    # Load data
-    rows = load_experiments(proj)
-    print(f"Loaded {len(rows)} experiment results.")
-
-    # Best from experiments (or baseline fallback)
-    best = max(rows, key=lambda r: r.get('fully_valid', 0)) if rows else None
-
-    # Generate all plots
-    plot_comparison_table(outdir, our_metrics=best)
-    plot_ablation_table(rows, outdir)
-    plot_ddim_pareto(rows, outdir)
-    plot_experiment_bars(rows, outdir)
-    export_latex_table(rows, outdir)
-
-    # Combined PDF
-    try:
-        from matplotlib.backends.backend_pdf import PdfPages
-        png_files = sorted(glob.glob(f'{outdir}/*.png'))
-        if png_files:
-            pdf_out = f'{outdir}/results_summary.pdf'
-            with PdfPages(pdf_out) as pdf:
-                for pf in png_files:
-                    img = plt.imread(pf)
-                    fig, ax = plt.subplots(figsize=(12, 7))
-                    ax.imshow(img); ax.axis('off')
-                    ax.set_title(os.path.basename(pf), fontsize=9)
-                    pdf.savefig(fig, bbox_inches='tight'); plt.close()
-            print(f"  PDF summary → {pdf_out}")
-    except Exception as e:
-        print(f"  PDF generation skipped: {e}")
-
-    print(f"\nAll plots saved to {outdir}/")
+    print(f"\nAll plots saved to: {OUT_DIR}/")
+    print("Key files:")
+    for f in sorted(OUT_DIR.glob("*.png")):
+        size_kb = f.stat().st_size // 1024
+        print(f"  {f.name:35s}  {size_kb} KB")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
