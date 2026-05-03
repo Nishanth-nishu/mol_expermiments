@@ -1,0 +1,40 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environment ───────────────────────────────────────────────────────
+venv/
+env/
+.env/
+.venv/
+
+# ── Large data files (regenerate with: python data/prepare_qm9.py) ───────────
+data/qm9_selfies.jsonl
+data/qm9_raw/
+
+# ── Model checkpoints (large binary files) ───────────────────────────────────
+checkpoints/*.pt
+experiments/*/checkpoint_best.pt
+
+# ── SLURM logs (generated at runtime) ────────────────────────────────────────
+logs/*.log
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.ipynb_checkpoints/
+
+# ── nohup / temp ─────────────────────────────────────────────────────────────
+nohup.out
+*.tmp

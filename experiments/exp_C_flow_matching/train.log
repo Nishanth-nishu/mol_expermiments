@@ -1,0 +1,29 @@
+Device: cuda | Experiment: exp_C_flow_matching
+Config: hidden=256 layers=6 epochs=50 geo_w=0.05 ode_steps=20
+Parameters: 2.81M
+Epoch 001/50 | train=3.1784 (mse=2.6929 geo=9.7093) val=2.9737 | lr=2.00e-05
+Epoch 002/50 | train=2.7605 (mse=2.3581 geo=8.0463) val=2.5224 | lr=4.00e-05
+Epoch 003/50 | train=2.4463 (mse=2.1242 geo=6.4426) val=2.3786 | lr=6.00e-05
+Epoch 004/50 | train=2.2741 (mse=1.9851 geo=5.7794) val=2.1645 | lr=8.00e-05
+Epoch 005/50 | train=2.1468 (mse=1.8792 geo=5.3521) val=2.0770 | lr=1.00e-04
+Epoch 006/50 | train=2.0689 (mse=1.8132 geo=5.1140) val=2.0215 | lr=1.00e-04
+Epoch 007/50 | train=2.0152 (mse=1.7668 geo=4.9693) val=1.9623 | lr=9.99e-05
+Epoch 008/50 | train=1.9570 (mse=1.7137 geo=4.8649) val=1.9136 | lr=9.95e-05
+Epoch 009/50 | train=1.9132 (mse=1.6737 geo=4.7902) val=1.8754 | lr=9.89e-05
+Epoch 010/50 | train=1.8801 (mse=1.6449 geo=4.7038) val=1.8344 | lr=9.81e-05
+Epoch 011/50 | train=1.8555 (mse=1.6230 geo=4.6507) val=1.8198 | lr=9.70e-05
+Epoch 012/50 | train=1.8326 (mse=1.6022 geo=4.6095) val=1.7815 | lr=9.57e-05
+Epoch 013/50 | train=1.8160 (mse=1.5880 geo=4.5586) val=1.7880 | lr=9.41e-05
+Epoch 014/50 | train=1.7967 (mse=1.5713 geo=4.5091) val=1.7430 | lr=9.24e-05
+Epoch 015/50 | train=1.7799 (mse=1.5553 geo=4.4912) val=1.7392 | lr=9.05e-05
+Epoch 016/50 | train=1.7627 (mse=1.5406 geo=4.4418) val=1.7214 | lr=8.83e-05
+Epoch 017/50 | train=1.7518 (mse=1.5309 geo=4.4185) val=1.7064 | lr=8.60e-05
+Epoch 018/50 | train=1.7375 (mse=1.5180 geo=4.3905) val=1.6980 | lr=8.35e-05
+Epoch 019/50 | train=1.7264 (mse=1.5077 geo=4.3726) val=1.6891 | lr=8.08e-05
+Epoch 020/50 | train=1.7123 (mse=1.4966 geo=4.3127) val=1.6855 | lr=7.80e-05
+Epoch 021/50 | train=1.7076 (mse=1.4913 geo=4.3261) val=1.6584 | lr=7.50e-05
+Epoch 022/50 | train=1.6955 (mse=1.4807 geo=4.2961) val=1.6498 | lr=7.19e-05
+Epoch 023/50 | train=1.6879 (mse=1.4744 geo=4.2712) val=1.6335 | lr=6.87e-05
+Epoch 024/50 | train=1.6768 (mse=1.4646 geo=4.2453) val=1.6265 | lr=6.55e-05
+Epoch 025/50 | train=1.6706 (mse=1.4585 geo=4.2418) val=1.6309 | lr=6.21e-05
+Epoch 026/50 | train=1.6663 (mse=1.4545 geo=4.2362) val=1.6106 | lr=5.87e-05

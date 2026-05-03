@@ -1,0 +1,11 @@
+Device: cuda | Experiment: exp_D_torsion_aux
+Config: hidden=256 layers=6 epochs=50 geo_w=0.5 torsions=True
+Parameters: 2.81M
+Epoch 001/50 | train=2.8109 (mse=0.7120 geo=3.7386) val=2.0824 | lr=2.00e-05
+Epoch 002/50 | train=2.3244 (mse=0.6058 geo=2.9780) val=2.0994 | lr=4.00e-05
+Epoch 003/50 | train=2.2907 (mse=0.5914 geo=2.9394) val=2.1267 | lr=6.00e-05
+Epoch 004/50 | train=2.3225 (mse=0.5906 geo=3.0048) val=2.1445 | lr=8.00e-05
+Epoch 005/50 | train=2.2853 (mse=0.5821 geo=2.9472) val=1.9138 | lr=1.00e-04
+Epoch 006/50 | train=2.2401 (mse=0.5720 geo=2.8771) val=1.9047 | lr=1.00e-04
+Epoch 007/50 | train=2.1957 (mse=0.5640 geo=2.8043) val=1.8757 | lr=9.99e-05
+Epoch 008/50 | train=2.1537 (mse=0.5605 geo=2.7273) val=1.7970 | lr=9.95e-05

@@ -1,0 +1,13 @@
+commit	fully_valid	mat_r	rmsd_mean	strain_kcal	cov_r	validity	bond_error	status	description
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	baseline adamw hidden=256 layers=6 geo_w=0.1 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	muon optimizer matrix-only hidden=256 layers=6 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	depth=8 hidden=256 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	geometry_weight=0.5 hidden=256 layers=6 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	ddim_steps=20 (fast inference) hidden=256 layers=6 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	lr=3e-4 warmup=10ep hidden=256 layers=6 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	baseline adamw hidden=256 layers=6 geo_w=0.1 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	muon optimizer matrix-only hidden=256 layers=6 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	depth=8 hidden=256 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	geometry_weight=0.5 hidden=256 layers=6 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	ddim_steps=20 (fast inference) hidden=256 layers=6 adamw 50ep
+nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	lr=3e-4 warmup=10ep hidden=256 layers=6 adamw 50ep

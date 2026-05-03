@@ -1,0 +1,226 @@
+PROMPT STORED: 2026-05-03
+
+================================================================================
+ORIGINAL USER REQUEST (verbatim)
+================================================================================
+
+"there are two directories which i want you to audit and do experiment on them
+where after the experiment i want you to store the prompt in a text file which
+you can refer in future after the results come out after the training of this
+diffusion model where i want you to research on this whole project and criticize
+it where and why the changes are not correct in here and rewrite the code where
+there is actual need and do experiments on this projects which one would actually
+bring a better results in the molecule generation via diffusion model where i
+want you to make sure that this approach should work anyhow as i want you to
+remove the unnecessary files from this project and keep the files clean and easy
+for maintainability so that i can be audited easily and where i want you to
+come up with an approach where i want you to write multiple bash scripts for
+each experiment, where i want at least 4 experiments which are researched well,
+where i want you to debate it well for each experiment and see which would
+actually bring a better result and progress in the training of this model where
+i want you to audit all the ways where it can break and make sure the results
+are good enough that it can be published in a really good research conference
+where i want this project to be a novel SOTA model anyhow, do as many
+experiments needed and all papers you refer should be top papers from top
+community which are actually relevant and can actually propose a better results
+in the mol2 and pdb file generation where i want the molecules to be generated
+which are physically true in nature which are stable enough so that it can be
+formed in 3D space and also i want you to consider that this dataset you're
+considering is also correct or not again"
+
+================================================================================
+DIRECTORIES AUDITED
+================================================================================
+
+1. /scratch/nishanth.r/nextmol_experiment/autoresearch/
+   - Karpathy's NanoGPT text language model (UNRELATED to molecules)
+   - train.py is a GPT pretraining loop on ClimbMix-400B text corpus
+   - prepare.py downloads parquet shards + trains BPE tokenizer
+   - NOT involved in molecule generation — do not run this for mol experiments
+
+2. /scratch/nishanth.r/nextmol_experiment/mol_next_gen/
+   - The actual molecular diffusion model project
+   - E(3)-equivariant EGNN + DDPM for 3D conformer generation on QM9
+   - autoresearch/mol_train.py: the training script (fixed)
+   - autoresearch/mol_prepare.py: FIXED harness (do NOT modify)
+   - models/: model files (now complete after bug fix)
+
+3. /scratch/nishanth.r/nextmol_experiment/original/mol_next_gen/
+   - Reference/original version of the project
+   - Contains the complete model files that were missing from mol_next_gen/
+
+================================================================================
+9 CRITICAL BUGS FOUND AND STATUS
+================================================================================
+
+BUG #1 [FIXED] - models/conformer_diffusion.py MISSING from mol_next_gen/models/
+  Root cause of ALL 13 experiment crashes (ModuleNotFoundError)
+  Fix: Copied from original/mol_next_gen/models/conformer_diffusion.py
+
+BUG #2 [FIXED] - models/geometry_constraints.py MISSING from mol_next_gen/models/
+  Required by conformer_diffusion.py → secondary crash cause
+  Fix: Copied from original/mol_next_gen/models/geometry_constraints.py
+
+BUG #3 [FIXED via prepare_qm9.py] - data/qm9_selfies.jsonl MISSING
+  ConformerDataset hardcodes this path; without it data loading crashes
+  Fix: data/prepare_qm9.py downloads QM9 SDF and converts to required JSONL format
+
+BUG #4 [FIXED] - flow_matching.py: wrong argument order in velocity_net call
+  Original: self.velocity_net(x_t, atom_types, edge_index, bond_types, batch_idx, t_int)
+  Fixed:    self.velocity_net(x_t, t_int_per_atom, atom_types, edge_index, bond_types, batch_idx)
+  ConformerDenoiser.forward() signature: (x_noisy, t, atom_types, edge_index, bond_types, batch_idx)
+
+BUG #5 [FIXED] - flow_matching.py: wrong x0_hat reconstruction
+  Original: x0_hat = x_t - t * v_pred   (t is per-mol [B], not broadcast)
+  Fixed:    x0_hat = x_t - t_atom * v_pred   (t_atom is per-atom [N,1])
+
+BUG #6 [FIXED] - mol_train.py: LR scheduler compounding bug
+  Original: pg['lr'] = lr * (pg.get('lr', base_lr) / base_lr)
+            multiplies current (already-scaled) lr → LR compounds each epoch
+  Fixed:    pg['lr'] = lr  (get_lr() always scales from initial base_lr)
+
+BUG #7 [FIXED] - mol_train.py: WARMUP_EPOCHS=50 with EPOCHS=50
+  Warmup ratio = 100% → LR never reaches target, model trains at ~1/50th LR
+  Fixed: WARMUP_EPOCHS=5 (10% of training)
+
+BUG #8 [FIXED] - Junk directories in mol_next_gen/
+  Removed: echo/, evaluation/, generation/, training/, "Directories created"
+  These were empty stale directories confusing project structure
+
+BUG #9 [FIXED] - 02_run_single_exp.sh mutates mol_train.py in-place
+  If crash mid-run, mol_train.py left permanently patched with wrong values
+  Fix: Separate mol_train_expA/B/C/D.py files per experiment (no in-place patching)
+
+================================================================================
+DATASET AUDIT
+================================================================================
+
+mol_prepare.py expects: data/qm9_selfies.jsonl
+  Fields: atom_types, coordinates, edge_index, bond_types, num_atoms
+  Filter: num_atoms <= 15, atom_types in [1,53]
+
+QM9 dataset:
+  - 134K drug-like small organic molecules (C, H, N, O, F atoms)
+  - DFT-optimized 3D coordinates at B3LYP/6-31G(2df,p) level of theory
+  - Geometries are physically valid by construction (quantum chemistry)
+  - Public domain: Ramakrishnan et al. Scientific Data 2014
+
+Verdict: QM9 is an APPROPRIATE dataset for 3D conformer generation.
+  - Gold-standard benchmark used by EDM, GeoDiff, GeoMol, TorDiff
+  - DFT coordinates are physically stable (electronically optimized)
+  - 134K molecules sufficient for supervised conformer generation
+
+To prepare: python data/prepare_qm9.py --output data/qm9_selfies.jsonl
+
+================================================================================
+4 EXPERIMENTS DESIGNED AND IMPLEMENTED
+================================================================================
+
+Experiment A — Fixed Baseline (DDPM + AdamW)
+  Script:    scripts/exp_A_baseline.sh
+  Trainer:   autoresearch/mol_train.py
+  Model:     ConformerDiffusion (E(3)-equivariant EGNN, DDPM, x0-param, cosine schedule)
+  Hypothesis: Clean reference after fixing all 9 bugs
+  Papers:    EDM (Hoogeboom ICML 2022), DDPM (Ho NeurIPS 2020)
+  Expected:  fully_valid ~0.70-0.85, mat_r ~0.30-0.50 Å at 50 epochs
+
+Experiment B — EQGAT-diff Attention EGNN
+  Script:    scripts/exp_B_attention_egnn.sh
+  Trainer:   autoresearch/mol_train_expB.py
+  Model:     AttnConformerDiffusion (4-head attention over EGNN messages, DDPM)
+  Hypothesis: Attention-weighted aggregation improves chiral/aromatic accuracy
+  Papers:    EQGAT-diff (Le et al. ICLR 2024), GAT (Veličković ICLR 2018)
+  Expected:  ~10% lower mat_r vs Exp A
+
+Experiment C — Conditional Flow Matching
+  Script:    scripts/exp_C_flow_matching.sh
+  Trainer:   autoresearch/mol_train_expC.py
+  Model:     FlowMatchingConformer (EGNN backbone, CFM training, Euler ODE 20-step)
+  Hypothesis: Straight ODE paths → equal accuracy at 4x fewer inference steps
+  Papers:    Lipman et al. Flow Matching ICLR 2023, FrameDiff (Yim ICML 2023)
+  Expected:  fully_valid >= Exp A, inference 4x faster (20 vs 50 NFE)
+
+Experiment D — Torsion Auxiliary Loss
+  Script:    scripts/exp_D_torsion_aux.sh
+  Trainer:   autoresearch/mol_train_expD.py
+  Model:     ConformerDiffusion + OPLS-AA torsion energy auxiliary loss
+  Hypothesis: Direct dihedral supervision reduces MAT-R (dominant conformer error)
+  Papers:    TorDiff (Jing NeurIPS 2022), GeoMol (Ganea NeurIPS 2021)
+  Expected:  15-25% lower mat_r vs Exp A (primary metric improvement)
+
+================================================================================
+FILES CREATED / MODIFIED
+================================================================================
+
+CREATED (new files):
+  models/conformer_diffusion.py       - Copied from original (v5, all bugs fixed)
+  models/geometry_constraints.py      - Copied from original (v3, complete)
+  models/__init__.py                  - Updated model exports
+  models/attn_conformer_diffusion.py  - NEW: EQGAT-diff attention EGNN
+  models/flow_matching.py             - FIXED: correct arg order + x0_hat broadcast
+  data/prepare_qm9.py                 - NEW: QM9 downloader + JSONL converter
+  autoresearch/mol_train_expB.py      - Exp B trainer (attention model)
+  autoresearch/mol_train_expC.py      - Exp C trainer (flow matching)
+  autoresearch/mol_train_expD.py      - Exp D trainer (torsion aux loss)
+  scripts/exp_A_baseline.sh           - Exp A SLURM script
+  scripts/exp_B_attention_egnn.sh     - Exp B SLURM script
+  scripts/exp_C_flow_matching.sh      - Exp C SLURM script
+  scripts/exp_D_torsion_aux.sh        - Exp D SLURM script
+
+MODIFIED:
+  autoresearch/mol_train.py           - Fixed LR scheduler + warmup bugs (Exp A)
+  
+REMOVED (junk):
+  echo/, evaluation/, generation/, training/, "Directories created"
+  experiments/exp_2_muon_optimizer, exp_3_depth_search, exp_4_geometry_weight
+  experiments/exp_5_ddim_steps, exp_6_flow_matching, exp_6_lr3e4, exp_6_snr3
+
+================================================================================
+HOW TO RUN
+================================================================================
+
+Step 1: Prepare dataset (one-time, ~5 minutes)
+  cd /scratch/nishanth.r/nextmol_experiment/mol_next_gen
+  source venv/bin/activate
+  python data/prepare_qm9.py --output data/qm9_selfies.jsonl
+
+Step 2: Smoke test imports
+  PYTHONPATH=. python -c "
+  from models.conformer_diffusion import ConformerDiffusion
+  from models.geometry_constraints import GeometryConstraints
+  from models.flow_matching import FlowMatchingConformer
+  from models.attn_conformer_diffusion import AttnConformerDiffusion
+  from autoresearch.mol_prepare import make_dataloaders
+  print('All imports OK')
+  "
+
+Step 3: Submit all 4 experiments (can run in parallel, each uses 1 GPU)
+  sbatch scripts/exp_A_baseline.sh
+  sbatch scripts/exp_B_attention_egnn.sh
+  sbatch scripts/exp_C_flow_matching.sh
+  sbatch scripts/exp_D_torsion_aux.sh
+
+Step 4: Monitor
+  squeue -u nishanth.r
+  tail -f logs/expA_*.log
+
+Step 5: Compare results
+  grep "fully_valid:\|mat_r:" experiments/exp_*/train.log
+  cat autoresearch/results.tsv
+
+================================================================================
+PUBLICATION TARGETS
+================================================================================
+
+If best experiment achieves:
+  fully_valid >= 0.85 (beats EDM 91.9% is stretch at 50ep)
+  mat_r <= 0.25 Å (GeoMol SOTA: 0.225 Å)
+
+Target conferences (AI4Science track):
+  - NeurIPS 2025 AI4Science Workshop
+  - ICML 2025 Computational Biology Workshop
+  - ICLR 2026 (full paper if mat_r <= 0.20 Å at 200 epochs)
+
+================================================================================
+END OF PROMPT RECORD
+================================================================================

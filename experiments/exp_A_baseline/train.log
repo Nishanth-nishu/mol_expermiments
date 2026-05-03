@@ -1,0 +1,41 @@
+Device: cuda
+Experiment: exp_A_baseline
+Config: hidden=256 layers=6 timesteps=1000 epochs=50 opt=adamw geo_w=0.1 lr=0.0001 warmup=5
+Parameters: 2.81M
+Optimizer: AdamW | lr=0.0001, wd=0.01
+Epoch 001/50 | train=1.0210 (mse=0.6501 geo=3.7096) val=0.8574 | lr=2.00e-05
+Epoch 002/50 | train=0.8239 (mse=0.5315 geo=2.9235) val=0.7683 | lr=4.00e-05
+Epoch 003/50 | train=0.7782 (mse=0.5016 geo=2.7655) val=0.7682 | lr=6.00e-05
+Epoch 004/50 | train=0.7581 (mse=0.4884 geo=2.6975) val=0.7542 | lr=8.00e-05
+Epoch 005/50 | train=0.7510 (mse=0.4827 geo=2.6823) val=0.7262 | lr=1.00e-04
+Epoch 006/50 | train=0.7294 (mse=0.4713 geo=2.5812) val=0.7103 | lr=1.00e-04
+Epoch 007/50 | train=0.7125 (mse=0.4617 geo=2.5087) val=0.6963 | lr=9.99e-05
+Epoch 008/50 | train=0.7030 (mse=0.4573 geo=2.4570) val=0.6727 | lr=9.95e-05
+Epoch 009/50 | train=0.6970 (mse=0.4532 geo=2.4386) val=0.6955 | lr=9.89e-05
+Epoch 010/50 | train=0.6895 (mse=0.4502 geo=2.3939) val=0.6576 | lr=9.81e-05
+Epoch 011/50 | train=0.6824 (mse=0.4461 geo=2.3632) val=0.6662 | lr=9.70e-05
+Epoch 012/50 | train=0.6753 (mse=0.4436 geo=2.3173) val=0.6616 | lr=9.57e-05
+Epoch 013/50 | train=0.6665 (mse=0.4402 geo=2.2638) val=0.6577 | lr=9.41e-05
+Epoch 014/50 | train=0.6639 (mse=0.4395 geo=2.2441) val=0.6476 | lr=9.24e-05
+Epoch 015/50 | train=0.6581 (mse=0.4363 geo=2.2182) val=0.6447 | lr=9.05e-05
+Epoch 016/50 | train=0.6524 (mse=0.4334 geo=2.1900) val=0.6449 | lr=8.83e-05
+Epoch 017/50 | train=0.6494 (mse=0.4309 geo=2.1848) val=0.6390 | lr=8.60e-05
+Epoch 018/50 | train=0.6450 (mse=0.4290 geo=2.1603) val=0.6319 | lr=8.35e-05
+Epoch 019/50 | train=0.6442 (mse=0.4290 geo=2.1520) val=0.6315 | lr=8.08e-05
+Epoch 020/50 | train=0.6400 (mse=0.4249 geo=2.1510) val=0.6331 | lr=7.80e-05
+Epoch 021/50 | train=0.6367 (mse=0.4241 geo=2.1261) val=0.6326 | lr=7.50e-05
+Epoch 022/50 | train=0.6357 (mse=0.4253 geo=2.1037) val=0.6284 | lr=7.19e-05
+Epoch 023/50 | train=0.6335 (mse=0.4231 geo=2.1041) val=0.6274 | lr=6.87e-05
+Epoch 024/50 | train=0.6306 (mse=0.4226 geo=2.0806) val=0.6177 | lr=6.55e-05
+Epoch 025/50 | train=0.6270 (mse=0.4183 geo=2.0867) val=0.6371 | lr=6.21e-05
+Epoch 026/50 | train=0.6266 (mse=0.4201 geo=2.0648) val=0.6076 | lr=5.87e-05
+Epoch 027/50 | train=0.6239 (mse=0.4189 geo=2.0496) val=0.6135 | lr=5.52e-05
+Epoch 028/50 | train=0.6216 (mse=0.4183 geo=2.0327) val=0.6128 | lr=5.17e-05
+Epoch 029/50 | train=0.6221 (mse=0.4177 geo=2.0437) val=0.6073 | lr=4.83e-05
+Epoch 030/50 | train=0.6182 (mse=0.4163 geo=2.0189) val=0.6164 | lr=4.48e-05
+Epoch 031/50 | train=0.6176 (mse=0.4160 geo=2.0157) val=0.6079 | lr=4.13e-05
+Epoch 032/50 | train=0.6128 (mse=0.4134 geo=1.9949) val=0.6138 | lr=3.79e-05
+Epoch 033/50 | train=0.6125 (mse=0.4139 geo=1.9860) val=0.6016 | lr=3.45e-05
+Epoch 034/50 | train=0.6117 (mse=0.4123 geo=1.9937) val=0.6004 | lr=3.13e-05
+Epoch 035/50 | train=0.6093 (mse=0.4114 geo=1.9790) val=0.5994 | lr=2.81e-05
+Epoch 036/50 | train=0.6064 (mse=0.4103 geo=1.9609) val=0.5923 | lr=2.50e-05
