@@ -1,0 +1,17 @@
+{
+  "exp_name": "exp_B_attention_egnn",
+  "exit_code": 0,
+  "fully_valid": 0.13,
+  "mat_r": 0.66682,
+  "rmsd_mean": 0.908562,
+  "strain_kcal": 10309.704405,
+  "cov_r": 0.22,
+  "validity": 0.966,
+  "bond_error": 0.229507,
+  "training_secs": 19313.3,
+  "peak_vram_mb": 252.8,
+  "num_params_M": 2.82,
+  "timestamp": "2026-05-03T21:38:30.936206",
+  "model": "AttnConformerDiffusion (EQGAT-diff, 4 heads)",
+  "key_changes": "Multi-head attention over EGNN messages (Le et al. ICLR 2024)"
+}

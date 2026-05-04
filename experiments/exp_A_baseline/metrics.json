@@ -1,0 +1,17 @@
+{
+  "exp_name": "exp_A_baseline",
+  "exit_code": 0,
+  "fully_valid": 0.128,
+  "mat_r": 0.672984,
+  "rmsd_mean": 0.891497,
+  "strain_kcal": 15353.485328,
+  "cov_r": 0.236,
+  "validity": 0.966,
+  "bond_error": 0.231282,
+  "training_secs": 19684.9,
+  "peak_vram_mb": 214.8,
+  "num_params_M": 2.81,
+  "timestamp": "2026-05-03T21:42:14.807347",
+  "model": "ConformerDiffusion (DDPM, AdamW)",
+  "key_changes": "Fixed baseline: LR bug + warmup bug + missing model files"
+}

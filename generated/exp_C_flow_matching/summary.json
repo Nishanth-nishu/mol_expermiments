@@ -1,0 +1,15 @@
+{
+  "exp_key": "exp_C_flow_matching",
+  "total_generated": 200,
+  "valid": 194,
+  "invalid": 6,
+  "fully_valid_rate": 0.97,
+  "mean_bond_error": 0.3463,
+  "failure_reasons": {
+    "kekulize_fail": 5,
+    "valence_error": 1
+  },
+  "sampler": "ode",
+  "num_steps": 20,
+  "output_dir": "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/generated/exp_C_flow_matching"
+}

@@ -11,3 +11,6 @@ nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	de
 nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	geometry_weight=0.5 hidden=256 layers=6 adamw 50ep
 nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	ddim_steps=20 (fast inference) hidden=256 layers=6 adamw 50ep
 nocommit	0.000000	999.000000	999.000000	0.00	0.000000	0.000000	0.000000	crash	lr=3e-4 warmup=10ep hidden=256 layers=6 adamw 50ep
+nocommit	0.130000	0.666820	0.908562	10309.70	0.220000	0.966000	0.229507	keep	Exp B: EQGAT-diff attention EGNN 4-heads 50ep
+nocommit	0.128000	0.672984	0.891497	15353.49	0.236000	0.966000	0.231282	keep	Exp A: fixed baseline DDPM AdamW 50ep
+nocommit	0.000000	0.843994	0.994105	66656.65	0.026000	0.966000	0.313258	discard	Exp C: flow matching CFM Euler ODE 20steps 50ep

@@ -27,3 +27,117 @@ Epoch 023/50 | train=1.6879 (mse=1.4744 geo=4.2712) val=1.6335 | lr=6.87e-05
 Epoch 024/50 | train=1.6768 (mse=1.4646 geo=4.2453) val=1.6265 | lr=6.55e-05
 Epoch 025/50 | train=1.6706 (mse=1.4585 geo=4.2418) val=1.6309 | lr=6.21e-05
 Epoch 026/50 | train=1.6663 (mse=1.4545 geo=4.2362) val=1.6106 | lr=5.87e-05
+Epoch 027/50 | train=1.6588 (mse=1.4479 geo=4.2185) val=1.6212 | lr=5.52e-05
+Epoch 028/50 | train=1.6531 (mse=1.4436 geo=4.1903) val=1.6088 | lr=5.17e-05
+Epoch 029/50 | train=1.6445 (mse=1.4359 geo=4.1725) val=1.6052 | lr=4.83e-05
+Epoch 030/50 | train=1.6404 (mse=1.4319 geo=4.1684) val=1.5997 | lr=4.48e-05
+Epoch 031/50 | train=1.6360 (mse=1.4283 geo=4.1543) val=1.5820 | lr=4.13e-05
+Epoch 032/50 | train=1.6271 (mse=1.4204 geo=4.1337) val=1.5843 | lr=3.79e-05
+Epoch 033/50 | train=1.6264 (mse=1.4187 geo=4.1547) val=1.5879 | lr=3.45e-05
+Epoch 034/50 | train=1.6228 (mse=1.4171 geo=4.1141) val=1.5847 | lr=3.13e-05
+Epoch 035/50 | train=1.6180 (mse=1.4125 geo=4.1105) val=1.5800 | lr=2.81e-05
+Epoch 036/50 | train=1.6130 (mse=1.4078 geo=4.1041) val=1.5661 | lr=2.50e-05
+Epoch 037/50 | train=1.6114 (mse=1.4064 geo=4.1001) val=1.5696 | lr=2.20e-05
+Epoch 038/50 | train=1.6067 (mse=1.4023 geo=4.0873) val=1.5681 | lr=1.92e-05
+Epoch 039/50 | train=1.6056 (mse=1.4011 geo=4.0897) val=1.5586 | lr=1.65e-05
+Epoch 040/50 | train=1.6046 (mse=1.4003 geo=4.0865) val=1.5617 | lr=1.40e-05
+Epoch 041/50 | train=1.6028 (mse=1.3988 geo=4.0788) val=1.5677 | lr=1.17e-05
+Epoch 042/50 | train=1.6019 (mse=1.3979 geo=4.0798) val=1.5461 | lr=9.55e-06
+Epoch 043/50 | train=1.5977 (mse=1.3944 geo=4.0678) val=1.5566 | lr=7.60e-06
+Epoch 044/50 | train=1.5968 (mse=1.3936 geo=4.0639) val=1.5512 | lr=5.85e-06
+Epoch 045/50 | train=1.5942 (mse=1.3912 geo=4.0590) val=1.5548 | lr=4.32e-06
+Epoch 046/50 | train=1.5946 (mse=1.3915 geo=4.0626) val=1.5488 | lr=3.02e-06
+Epoch 047/50 | train=1.5950 (mse=1.3919 geo=4.0626) val=1.5554 | lr=1.94e-06
+Epoch 048/50 | train=1.5944 (mse=1.3916 geo=4.0548) val=1.5499 | lr=1.09e-06
+Epoch 049/50 | train=1.5941 (mse=1.3909 geo=4.0630) val=1.5425 | lr=4.87e-07
+Epoch 050/50 | train=1.5915 (mse=1.3893 geo=4.0449) val=1.5438 | lr=1.22e-07
+
+Running final evaluation (ODE sampler, 20 steps)...
+[22:41:33] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:41:44] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:41:53] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:42:01] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:42:16] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:42:31] Can't kekulize mol.  Unkekulized atoms: 1 3 4 5 6
+[22:42:56] Can't kekulize mol.  Unkekulized atoms: 2 3 7
+[22:42:58] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:04] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:07] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:08] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:09] Explicit valence for atom # 8 N, 4, is greater than permitted
+[22:43:10] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:23] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:32] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:43:41] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:16] Can't kekulize mol.  Unkekulized atoms: 1 2 3 5 6
+[22:44:17] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:25] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:26] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:36] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:40] Can't kekulize mol.  Unkekulized atoms: 4 6 7
+[22:44:45] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:48] Can't kekulize mol.  Unkekulized atoms: 2 3 4 6 7
+[22:44:51] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:44:52] Can't kekulize mol.  Unkekulized atoms: 1 2 3 4 7
+[22:44:59] Explicit valence for atom # 0 N, 4, is greater than permitted
+[22:45:13] Can't kekulize mol.  Unkekulized atoms: 1 5 6
+[22:45:18] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:45:25] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:45:45] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:45:57] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:46:06] Can't kekulize mol.  Unkekulized atoms: 1 2 3 6 7
+[22:46:16] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:46:24] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:46:38] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:46:50] Can't kekulize mol.  Unkekulized atoms: 2 3 4 5 6
+[22:47:13] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:47:14] Can't kekulize mol.  Unkekulized atoms: 2 3 5 6 7
+[22:47:28] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:47:45] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:47:46] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:09] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:11] Can't kekulize mol.  Unkekulized atoms: 1 2 4 6 7
+[22:48:13] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:19] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:29] Can't kekulize mol.  Unkekulized atoms: 2 3 4 5 6
+[22:48:31] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:33] Can't kekulize mol.  Unkekulized atoms: 1 2 6
+[22:48:36] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:48:40] Can't kekulize mol.  Unkekulized atoms: 3 4 7
+[22:48:57] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:49:04] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:49:07] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:49:25] Can't kekulize mol.  Unkekulized atoms: 2 4 5
+[22:49:27] Molecule does not have explicit Hs. Consider calling AddHs()
+[22:49:30] Molecule does not have explicit Hs. Consider calling AddHs()
+  Eval [500/500] 504s
+
+── Eval [exp_C_flow_matching] ────────────────────────────────────────
+  n_evaluated       : 500
+  RDKit valid       :   96.6%
+  Bond valid (0.2Å) :    4.8%
+  Clash-free        :    0.0%
+  Fully valid ←PRIMARY:    0.0%
+  Mean bond error   : 0.3133 Å
+  COV-R             :    2.6%
+  MAT-R ←SECONDARY  : 0.8440 Å
+  Kabsch-RMSD       : 0.9941 ± 0.2343 Å
+  MMFF strain       : 66656.65 kcal/mol (483 mols)
+
+---
+fully_valid:    0.000000
+mat_r:          0.843994
+rmsd_mean:      0.994105
+strain_kcal:    66656.652918
+cov_r:          0.026000
+validity:       0.966000
+bond_error:     0.313258
+training_secs:  20003.2
+total_secs:     20513.8
+peak_vram_mb:   217.0
+num_epochs:     50
+num_params_M:   2.81
+optimizer:      adamw
+geometry_weight:0.05
+ode_steps:      20
+exp_name:       exp_C_flow_matching
