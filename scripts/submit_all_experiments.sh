@@ -58,3 +58,6 @@ echo "  Follow logs:   tail -f logs/expA_${JOB_A}.log"
 echo "  Results TSV:   cat autoresearch/results.tsv"
 echo "  Submitted: $(date)"
 echo "============================================================"
+
+JOB_E=$(sbatch --parsable scripts/exp_E_sota_hybrid.sh)
+echo "  Submitted Exp E (sota hybrid):      Job $JOB_E"

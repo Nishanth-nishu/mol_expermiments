@@ -12,6 +12,7 @@ Usage (imported by mol_train.py):
 """
 
 import os, sys, json, time, math, copy
+from pathlib import Path
 import numpy as np
 from typing import Dict, List, Optional, Tuple
 import torch
@@ -23,7 +24,7 @@ from torch.utils.data import Dataset, DataLoader
 _HERE        = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(_HERE)
 
-DATA_PATH      = os.path.join(PROJECT_ROOT, "data", "qm9_selfies.jsonl")
+DATA_PATH      = Path(os.environ.get("MOL_DATASET", os.path.join(PROJECT_ROOT, "data", "qm9_selfies.jsonl")))
 CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, "checkpoints")
 
 MAX_ATOMS      = 29    # QM9 with explicit-H: max is 29 atoms (9 heavy + ~20 H)
@@ -32,7 +33,7 @@ MAX_ATOMS      = 29    # QM9 with explicit-H: max is 29 atoms (9 heavy + ~20 H)
 VAL_SPLIT      = 0.1   # 10 % validation
 RANDOM_SEED    = 42
 EVAL_MOLECULES = 500   # fixed evaluation set size (comparable across all experiments)
-EPOCH_BUDGET   = 50    # fast experiment budget (≈ autoresearch 5-min budget)
+EPOCH_BUDGET   = 200    # budget for SOTA training
 FULL_BUDGET    = 200   # for final full training
 
 # Evaluation thresholds — from EDM / GeoMol papers (DO NOT change)

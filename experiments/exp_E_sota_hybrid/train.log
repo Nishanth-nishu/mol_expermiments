@@ -1,0 +1,19 @@
+Device: cuda | Experiment: exp_E_sota_hybrid
+Config: hidden=256 layers=6 heads=4 epochs=200 geo_w=0.5 torsions=True ode=100
+Parameters: 2.82M
+Epoch 001/200 | train=7.8683 (mse=4.6414 geo=6.4538) val=7.1916 | lr=4.00e-05
+Epoch 002/200 | train=7.1204 (mse=4.0665 geo=6.1078) val=6.8900 | lr=6.00e-05
+Epoch 003/200 | train=6.8125 (mse=3.7971 geo=6.0309) val=6.6046 | lr=8.00e-05
+Epoch 004/200 | train=6.5355 (mse=3.6145 geo=5.8420) val=6.3578 | lr=1.00e-04
+Epoch 005/200 | train=6.3292 (mse=3.4818 geo=5.6947) val=6.2200 | lr=1.00e-04
+Epoch 006/200 | train=6.1378 (mse=3.3703 geo=5.5350) val=5.9847 | lr=1.00e-04
+Epoch 007/200 | train=6.0213 (mse=3.2982 geo=5.4462) val=5.9301 | lr=1.00e-04
+Epoch 008/200 | train=5.7938 (mse=3.0637 geo=5.4603) val=5.6002 | lr=9.99e-05
+Epoch 009/200 | train=5.6550 (mse=2.9486 geo=5.4129) val=5.5137 | lr=9.99e-05
+Epoch 010/200 | train=5.5569 (mse=2.8915 geo=5.3307) val=5.4644 | lr=9.98e-05
+Epoch 011/200 | train=5.4878 (mse=2.8329 geo=5.3098) val=5.3137 | lr=9.98e-05
+Epoch 012/200 | train=5.4193 (mse=2.7785 geo=5.2815) val=5.2590 | lr=9.97e-05
+Epoch 013/200 | train=5.3519 (mse=2.7329 geo=5.2381) val=5.2414 | lr=9.96e-05
+Epoch 014/200 | train=5.2995 (mse=2.6844 geo=5.2301) val=5.1444 | lr=9.95e-05
+Epoch 015/200 | train=5.2386 (mse=2.6435 geo=5.1904) val=5.0744 | lr=9.94e-05
+Epoch 016/200 | train=5.1717 (mse=2.5982 geo=5.1471) val=5.0477 | lr=9.92e-05

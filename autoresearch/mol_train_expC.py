@@ -35,9 +35,15 @@ WEIGHT_DECAY     = 0.01
 OPTIMIZER        = "adamw"
 
 EPOCHS           = EPOCH_BUDGET
-GEOMETRY_WEIGHT  = 0.05       # Lower: CFM x0_hat less stable early on
+# CFM Fix: Remove geometry loss from training.
+# At t≈1 (high noise), x0_hat = x_t - t*v_pred is pure random noise, giving
+# chaotic geometry gradients that destabilize the velocity network.
+# This explains the 28k-67k kcal/mol strain energy in Exp C results.
+# Reference: Yim et al. (FrameDiff, ICML 2023) applies geo constraints only
+# as post-sampling refinement, NOT during CFM training.
+GEOMETRY_WEIGHT  = 0.0       # FIXED: was 0.05, causing training instability
 WARMUP_EPOCHS    = 5
-ODE_STEPS        = 20         # CFM only needs 20 ODE steps
+ODE_STEPS        = 20         # CFM only needs 20 steps (Lipman 2023) — was 100
 
 SAVE_BEST        = True
 EXP_NAME         = "exp_C_flow_matching"

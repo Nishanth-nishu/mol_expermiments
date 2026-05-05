@@ -49,7 +49,8 @@ OPTIMIZER        = "adamw"
 
 EPOCHS           = EPOCH_BUDGET
 GEOMETRY_WEIGHT  = 0.5       # INCREASED: stronger geometry supervision
-INCLUDE_TORSIONS = True      # KEY CHANGE: enable torsion angle loss
+INCLUDE_TORSIONS = True      # KEY CHANGE: enable torsion angle loss on x_0_pred
+                             # (NOTE: must pass this into get_loss, NOT on GT coords!)
 WARMUP_EPOCHS    = 5
 MIN_SNR_GAMMA    = 5.0
 DDIM_STEPS       = 50
@@ -113,26 +114,18 @@ def main():
             co = remove_com(co, bi)
 
             optimizer.zero_grad(set_to_none=True)
-            # KEY CHANGE: torsion loss enabled via _compute_geometry_loss
-            # We pass include_torsions through the geometry object directly
+            # KEY CHANGE: pass include_torsions=True so torsion loss is computed
+            # on x_0_pred (the predicted clean coords) — NOT on ground-truth 'co'.
+            # The old approach of computing torsion_loss(co, ...) was wrong because
+            # GT QM9 DFT coords already minimize torsion energy → loss ≈ 0.0.
             loss_dict = model.get_loss(
                 co, at, ei, bt, bi,
                 geometry_weight=GEOMETRY_WEIGHT,
                 epoch=epoch, max_epochs=EPOCHS,
                 min_snr_gamma=MIN_SNR_GAMMA,
+                include_torsions=INCLUDE_TORSIONS,  # ← torsion on x_0_pred
             )
-
-            # Add extra torsion loss on top of standard geometry loss
-            # (ConformerDiffusion.get_loss uses include_torsions=False by default)
-            if INCLUDE_TORSIONS:
-                torsion_loss = model.geometry.compute_torsion_loss(
-                    # Use x_0 directly — torsion supervision on ground-truth coords
-                    co, at, ei, bt, bi
-                )
-                extra_torsion = GEOMETRY_WEIGHT * torsion_loss
-                loss = loss_dict['total'] + extra_torsion
-            else:
-                loss = loss_dict['total']
+            loss = loss_dict['total']
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)

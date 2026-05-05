@@ -583,21 +583,18 @@ class ConformerDiffusion(nn.Module):
                  geometry_weight: float = 1.0,
                  epoch: int = 1,
                  max_epochs: int = 300,
-                 min_snr_gamma: float = 5.0) -> Dict:
+                 min_snr_gamma: float = 5.0,
+                 geo_t_fraction: float = 0.3,
+                 include_torsions: bool = False) -> Dict:
         """
-        Training loss — v5 (complete fixes):
+        Training loss — v6 (geometry loss timestep gating + torsion param):
 
-        FIX-3: x_0 parameterization
-          - denoiser returns x_0_pred
-          - ε derived: ε_pred = (x_t - √ᾱ · x_0_pred) / √(1-ᾱ)
-          - MSE on ε_pred vs true ε → same loss surface, stable geometry gradients
-
-        FIX-4: Geometry loss applied at ALL timesteps, weight = geometry_weight (not *0.1)
-          - No t-gating (was active only 20% of time before)
-          - Geometry supervised directly on x_0_pred (x_0 parameterization means
-            x_0_pred is always explicitly available, not amplified from ε)
-
-        FIX-6: SNR weighting is per-molecule (not per-atom) to avoid large-mol bias.
+        FIX-3: x_0 parameterization.
+        FIX-4 (REVISED): Geometry loss gated to t < T*geo_t_fraction (default 30%).
+          At high timesteps x_0_pred has RMSD ~1Å vs GT — geometry gradients are
+          chaotic. Only apply geo loss where x_0_pred is reliable.
+          Follows GCDM (Morehead & Cheng, NeurIPS 2023) Section 3.3.
+        FIX-6: SNR weighting per-molecule (no large-mol bias).
         """
         device = x_0.device
         B = int(batch_idx.max().item()) + 1
@@ -632,11 +629,44 @@ class ConformerDiffusion(nn.Module):
         snr_weight = torch.minimum(snr_t, torch.full_like(snr_t, min_snr_gamma)) / snr_t.clamp(min=1e-8)
         mse_loss = (snr_weight * mse_per_mol).mean()
 
-        # FIX-4: Geometry loss at ALL timesteps, direct on x_0_pred (no t-gating, no extra *0.1)
-        geo_loss = self._compute_geometry_loss(
-            x_0_pred, atom_types, edge_index, bond_types, batch_idx,
-            include_angles=True, include_torsions=False
-        )
+        # FIX-4 (REVISED): Gate geometry loss to low-noise timesteps.
+        # Only molecules with t < T*geo_t_fraction get geometry supervision.
+        # At high t, x_0_pred is near-random and geometry gradients are noise.
+        # GCDM (Morehead & Cheng 2023) applies geometry loss at low t only.
+        if geometry_weight > 0:
+            t_threshold = int(self.num_timesteps * geo_t_fraction)
+            geo_mask = (t < t_threshold)  # (B,) which molecules get geo loss
+            if geo_mask.any():
+                atom_mask = geo_mask[batch_idx]  # (N,) atoms in low-t molecules
+                x_0_pred_low = x_0_pred[atom_mask]
+                at_low = atom_types[atom_mask]
+                bi_low_raw = batch_idx[atom_mask]
+
+                # Re-index batch_idx to 0-based for the subset
+                low_mol_ids = geo_mask.nonzero(as_tuple=True)[0]
+                old_to_new = torch.full((B,), -1, dtype=torch.long, device=device)
+                old_to_new[low_mol_ids] = torch.arange(geo_mask.sum().item(), device=device)
+                bi_low = old_to_new[bi_low_raw]
+
+                # Filter edges to low-t molecules, re-index to local atom indices
+                row, col = edge_index
+                edge_mask = atom_mask[row] & atom_mask[col]
+                ei_low = edge_index[:, edge_mask]
+                bt_low = bond_types[edge_mask]
+                local_idx = torch.full((atom_mask.size(0),), -1, dtype=torch.long, device=device)
+                global_to_local = torch.full((x_0_pred.size(0),), -1, dtype=torch.long, device=device)
+                atom_global_ids = atom_mask.nonzero(as_tuple=True)[0]
+                global_to_local[atom_global_ids] = torch.arange(atom_global_ids.size(0), device=device)
+                ei_low_local = global_to_local[ei_low]
+
+                geo_loss = self._compute_geometry_loss(
+                    x_0_pred_low, at_low, ei_low_local, bt_low, bi_low,
+                    include_angles=True, include_torsions=include_torsions
+                )
+            else:
+                geo_loss = torch.tensor(0.0, device=device)
+        else:
+            geo_loss = torch.tensor(0.0, device=device)
 
         total_loss = mse_loss + geometry_weight * geo_loss
 
