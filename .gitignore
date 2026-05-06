@@ -1,52 +1,27 @@
-# ── Python ────────────────────────────────────────────────────────────────────
+# Large data files — use Git LFS or copy manually between nodes
+data/*.jsonl
+data/*.pkl
+data/*.pt
+data/*.sdf
+data/*.gz
+
+# Model checkpoints — large, node-local
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Python
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
-*.pyd
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
-.eggs/
-
-# ── Virtual environment ───────────────────────────────────────────────────────
 venv/
-env/
-.env/
-.venv/
+*.egg-info/
 
-# ── Large data files (regenerate with: python data/prepare_qm9.py) ───────────
-data/qm9_selfies.jsonl
-data/qm9_raw/
+# Experiment outputs — large logs/results, not needed in repo
+experiments/*/train.log
+experiments/*/metrics.json
+logs/
 
-# ── Model checkpoints (large binary files) ───────────────────────────────────
-checkpoints/*.pt
-experiments/*/checkpoint_best.pt
-
-# ── SLURM logs (generated at runtime) ────────────────────────────────────────
-logs/*.log
-
-# ── IDE / OS ──────────────────────────────────────────────────────────────────
-.idea/
-.vscode/
-*.swp
-*.swo
+# OS
 .DS_Store
-.ipynb_checkpoints/
-
-# ── nohup / temp ─────────────────────────────────────────────────────────────
-nohup.out
-*.tmp
-
-# ── Generated molecules (large, regenerate via mol_infer.py) ─────────────────
-generated/*/mol_*.pdb
-generated/*/mol_*.mol2
-generated/*/invalid_*.pdb
-generated/*/molecules.sdf
-
-# ── Keep: summary.json per experiment (small, important for results) ─────────
-!generated/*/summary.json
-
-# ── Keep: visualization plots (committed for GitHub display) ─────────────────
-!visualization/plots/*.png
