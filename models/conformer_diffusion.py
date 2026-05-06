@@ -328,7 +328,7 @@ class ConformerDiffusion(nn.Module):
         # Geometry constraints (weights configured in training script)
         from models.geometry_constraints import GeometryConstraints
         self.geometry = GeometryConstraints(
-            bond_weight=10.0,
+            bond_weight=20.0,    # FIX-AUDIT-3: was 10.0; bond_error=0.230 > 0.20 Å threshold
             angle_weight=3.0,
             torsion_weight=1.0,
             repulsion_weight=5.0,
@@ -608,20 +608,17 @@ class ConformerDiffusion(nn.Module):
         x_0_pred = self.denoiser(x_t, t, atom_types, edge_index, bond_types, batch_idx)
         x_0_pred = remove_com(x_0_pred, batch_idx)
 
-        # Derive ε from x_0_pred for MSE loss
-        sqrt_alpha = self._extract(self.sqrt_alphas_cumprod, t, batch_idx)        # (N,1)
-        sqrt_one_minus = self._extract(self.sqrt_one_minus_alphas_cumprod, t, batch_idx)  # (N,1)
-        noise_pred = (x_t - sqrt_alpha * x_0_pred) / sqrt_one_minus.clamp(min=1e-6)
+        # FIX-AUDIT-2: Direct x₀ MSE (EDM App. B, Hoogeboom et al. ICML 2022).
+        # For x₀-parameterization, MSE on x₀ directly avoids the 1/sqrt(1-αt)
+        # amplification at high timesteps that comes from re-deriving ε.
+        # The loss surface on x₀ is smoother and better-conditioned.
+        x0_err_per_atom = ((x_0_pred - x_0) ** 2).sum(-1)  # (N,)
 
-        # Per-atom MSE on noise
-        mse_per_atom = ((noise_pred - noise) ** 2).sum(-1)  # (N,)
-
-        # FIX-6: reduce to per-molecule, then apply SNR weight per molecule
-        # scatter mean: average mse within each molecule
+        # Reduce to per-molecule MSE, then SNR-weight per molecule
         mse_per_mol = torch.zeros(B, device=device)
-        mol_counts = torch.zeros(B, device=device)
-        mse_per_mol.scatter_add_(0, batch_idx, mse_per_atom)
-        mol_counts.scatter_add_(0, batch_idx, torch.ones(mse_per_atom.size(0), device=device))
+        mol_counts   = torch.zeros(B, device=device)
+        mse_per_mol.scatter_add_(0, batch_idx, x0_err_per_atom)
+        mol_counts.scatter_add_(0, batch_idx, torch.ones(x0_err_per_atom.size(0), device=device))
         mse_per_mol = mse_per_mol / mol_counts.clamp(min=1)
 
         # Min-SNR weighting (Hang et al. 2023) — per molecule

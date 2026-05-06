@@ -71,13 +71,16 @@ def build_optimizer(model):
 
 
 def get_lr(epoch, base_lr):
-    """Cosine schedule with linear warmup.
-    BUG-FIX-6: always scale from base_lr (initial), not from current lr.
+    """Cosine schedule with linear warmup and LR floor.
+    FIX-AUDIT-5: floor at 1% of base_lr — prevents LR from decaying to ~0
+    which caused training to stall at epoch ~150 (lr=6e-9 at epoch 200).
+    Reference: Song & Ermon 'Improved Score-Based Generative Models' NeurIPS 2020.
     """
     if epoch < WARMUP_EPOCHS:
         return base_lr * (epoch + 1) / max(WARMUP_EPOCHS, 1)
     progress = (epoch - WARMUP_EPOCHS) / max(1, EPOCHS - WARMUP_EPOCHS)
-    return base_lr * 0.5 * (1 + math.cos(math.pi * progress))
+    cosine_lr = base_lr * 0.5 * (1 + math.cos(math.pi * progress))
+    return max(cosine_lr, base_lr * 0.01)   # floor at 1% of peak LR
 
 # ============================================================================
 # MAIN TRAINING LOOP

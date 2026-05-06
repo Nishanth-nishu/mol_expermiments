@@ -1,0 +1,54 @@
+============================================================
+  Experiment F: exp_F_heavy_atom
+  World size: 2 GPU(s)
+  Device: cuda:0
+  Config: SOTA: heavy-atom-only QM9, AttnEGNN hidden=384 L=8, torsions, DDP+AMP
+============================================================
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 513, in <module>
+[rank1]:     main()
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 373, in main
+[rank1]:     train_loader.sampler = DistributedSampler(
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 463, in __setattr__
+[rank1]:     raise ValueError(
+[rank1]: ValueError: sampler attribute should not be set after DataLoader is initialized
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 513, in <module>
+[rank0]:     main()
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 373, in main
+[rank0]:     train_loader.sampler = DistributedSampler(
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 463, in __setattr__
+[rank0]:     raise ValueError(
+[rank0]: ValueError: sampler attribute should not be set after DataLoader is initialized
+[rank0]:[W506 16:32:03.313394243 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+W0506 16:32:03.354000 1135537 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1135545 closing signal SIGTERM
+E0506 16:32:03.919000 1135537 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 1135546) of binary: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/bin/python3
+Traceback (most recent call last):
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/distributed/run.py", line 919, in main
+    run(args)
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/distributed/run.py", line 910, in run
+    elastic_launch(
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-06_16:32:03
+  host      : gnode118.local
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 1135546)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

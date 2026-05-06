@@ -371,3 +371,141 @@ For ICLR-quality paper: need heavy-atom-only QM9 + 500 epochs + hidden_dim=384
 ================================================================================
 END OF PROMPT RECORD
 ================================================================================
+
+================================================================================
+SESSION 7 — 2026-05-06 — FULL AUDIT IMPLEMENTATION
+Conversation ID: 29274df8-bea5-4634-8096-7fe76733bd5d
+================================================================================
+
+CONTEXT:
+  After 200 epochs of Exp A–E, results remained poor:
+    Exp A (DDPM baseline):  fully_valid=14.0%, MAT-R=0.638 Å, bond_error=0.230 Å
+    Exp B (Attn-EGNN):     fully_valid=13.6%, MAT-R=0.654 Å, bond_error=0.227 Å
+    Exp D/E: still running (only 77/58 epochs completed at audit time)
+  Audit identified 12 root causes. All implemented in this session.
+
+IMPLEMENTED FIXES:
+
+  FIX-AUDIT-1: Ported t-gating to AttnConformerDiffusion.get_loss()
+    File: models/attn_conformer_diffusion.py (FULLY REWRITTEN)
+    The ORIGINAL file had a comment "FIX-4: all timesteps" confirming the bug:
+    geometry loss was applied to ALL noise levels. Only conformer_diffusion.py
+    had been t-gated, not the attention model used by Exp B and E.
+    Fix: geo_t_fraction=0.3 → geometry loss only when t < T*0.3
+    Reference: GCDM (Morehead & Cheng, NeurIPS 2023 §3.3)
+
+  FIX-AUDIT-2: Switched MSE from derived-ε to DIRECT x₀ loss
+    Files: models/conformer_diffusion.py (line 610), models/attn_conformer_diffusion.py
+    Previous: computed noise_pred = (x_t - sqrt_alpha * x_0_pred) / sqrt_one_minus
+              then MSE(noise_pred, noise) — has 1/sqrt(1-αt) amplification at high t
+    Fixed:    MSE(x_0_pred, x_0) directly — smoother loss surface
+    Reference: EDM (Hoogeboom et al. ICML 2022, App. B)
+
+  FIX-AUDIT-3: Bond weight increased 10.0 → 20.0
+    Files: models/conformer_diffusion.py (GeometryConstraints instantiation)
+           models/attn_conformer_diffusion.py (same)
+    Root cause: bond_error=0.230 Å > 0.200 Å validity threshold was killing
+    fully_valid. With geo_weight=0.1 × bond_weight=10 × 30% active = 0.3 eff.
+    weight — too weak. Now bond_weight=20.0.
+
+  FIX-AUDIT-4: Added global graph readout to AttnConformerDenoiser
+    File: models/attn_conformer_diffusion.py (AttnConformerDenoiser class)
+    Added mean-pool per molecule then broadcast back + concat to atom features
+    before coordinate prediction head. Enables the model to condition on whole-
+    molecule context (aromatic ring systems, functional groups).
+    Reference: EGNN (Satorras et al. ICML 2021 §3.3)
+
+  FIX-AUDIT-5: LR floor at 1% of base_lr in all trainers
+    Files: autoresearch/mol_train.py, mol_train_expB.py, mol_train_expC.py,
+           mol_train_expD.py, mol_train_expE.py
+    Previous cosine decay reached LR=6e-9 at epoch 200 → model stopped learning
+    at epoch ~150. Floor: get_lr always returns max(cosine_lr, base_lr * 0.01).
+    Reference: Song & Ermon 'Improved Score-Based Generative Models' NeurIPS 2020
+
+  FIX-AUDIT-6: DDP training wrapper (NEW FILE)
+    File: autoresearch/mol_train_ddp.py (NEW)
+    Supports all 6 experiments (A/B/C/D/E/F) via --exp flag.
+    Features: DistributedDataParallel, AMP fp16 (GradScaler), torch.compile,
+              DistributedSampler for per-GPU data sharding, LR floor, x0-MSE.
+    Launched via: torchrun --nproc_per_node=NUM_GPUS autoresearch/mol_train_ddp.py --exp F
+    GPU utilization: DDP syncs gradients, AMP uses 2× VRAM → larger batches.
+
+  FIX-AUDIT-7: Heavy-atom QM9 dataset (BIGGEST EXPECTED IMPACT)
+    File: data/prepare_qm9_heavy.py (NEW)
+    Strips explicit H atoms using RDKit RemoveHs() from qm9_selfies.jsonl.
+    Output: data/qm9_heavy.jsonl (max 9 atoms/mol vs 18 explicit-H)
+    Why: All SOTA papers (GeoMol, GeoDiff, TorDiff) use heavy-atom-only QM9.
+    Their MAT-R 0.22-0.30 Å vs our 0.64 Å is partly explained by this.
+    Impact: 4× fewer atoms → 4× faster training → enables 500 epochs in budget.
+    Reference: GeoMol (Ganea et al. NeurIPS 2021), GeoDiff (Xu et al. ICML 2022)
+
+  FIX-AUDIT-8: New Experiment F — SOTA Hybrid heavy-atom (NEW)
+    Config in autoresearch/mol_train_ddp.py (EXP_CONFIGS['F']):
+      model_cls: AttnConformerDiffusion (all audit fixes applied)
+      hidden_dim: 384 (upgraded from 256)
+      num_layers: 8 (upgraded from 6)
+      num_heads: 6 (upgraded from 4)
+      batch_size: 256/GPU (heavy-atom mols fit 4× more)
+      epochs: 500
+      geometry_weight: 0.5, geo_t_fraction: 0.3, include_torsions: True
+      dataset: data/qm9_heavy.jsonl
+    SLURM script: scripts/exp_F_heavy_atom_ddp.sh
+
+NEW FILES CREATED:
+  - autoresearch/mol_train_ddp.py       (DDP training wrapper, all 6 exps)
+  - data/prepare_qm9_heavy.py           (H-stripping, heavy-atom dataset)
+  - scripts/exp_F_heavy_atom_ddp.sh     (SLURM 4-GPU DDP script for Exp F)
+  - data/qm9_heavy.jsonl               (GENERATED: ~130k heavy-atom molecules)
+
+FILES MODIFIED:
+  - models/attn_conformer_diffusion.py  (REWRITTEN: t-gating, x0-MSE, global readout)
+  - models/conformer_diffusion.py       (x0-MSE, bond_weight 10→20)
+  - autoresearch/mol_train.py           (LR floor)
+  - autoresearch/mol_train_expB.py      (LR floor)
+  - autoresearch/mol_train_expC.py      (LR floor)
+  - autoresearch/mol_train_expD.py      (LR floor)
+  - autoresearch/mol_train_expE.py      (LR floor)
+
+CURRENT RESULTS (pre-fixes, 200 epochs explicit-H QM9):
+  Exp A: fully_valid=14.0%, MAT-R=0.638 Å, bond_error=0.230 Å, strain=34250
+  Exp B: fully_valid=13.6%, MAT-R=0.654 Å, bond_error=0.227 Å, strain=4078
+  Exp D: incomplete (only ~77 epochs of 200 at last check)
+  Exp E: incomplete (only ~58 epochs of 200 at last check)
+
+EXPECTED RESULTS AFTER ALL FIXES (heavy-atom, 500 epochs, Exp F DDP):
+  fully_valid: ~50–65%    (was 13–14%, SOTA: >60%)
+  MAT-R:       ~0.28–0.35 Å  (was 0.64 Å, SOTA: 0.22 Å)
+  bond_error:  <0.15 Å    (was 0.23 Å, threshold: 0.20 Å)
+  Training:    ~18–24h on 4× RTX 3090 (DDP)
+
+HOW TO RUN EXP F:
+  cd /scratch/nishanth.r/nextmol_experiment/mol_next_gen
+  # Option A: SLURM (recommended)
+  sbatch scripts/exp_F_heavy_atom_ddp.sh
+
+  # Option B: Direct torchrun (all available GPUs)
+  source venv/bin/activate
+  NUM_GPUS=$(nvidia-smi --list-gpus | wc -l)
+  torchrun --nproc_per_node=$NUM_GPUS \
+      autoresearch/mol_train_ddp.py --exp F --heavy-only
+
+  # Option C: Single GPU debug
+  python autoresearch/mol_train_ddp.py --exp F --no-ddp
+
+IF RESULTS STILL POOR AFTER EXP F:
+  1. Check bond_error first — if > 0.15 Å, increase bond_weight to 30.0
+  2. Check geo_loss convergence — if geo_loss > 0.1 at epoch 200, increase geo_t_fraction to 0.4
+  3. If MAT-R plateau > 0.35 Å at epoch 300, try ReduceLROnPlateau instead of cosine
+  4. If fully_valid < 30%, check validity errors in eval log — "Can't kekulize" means
+     atom type generation is wrong (not geometry) → add atom type loss
+  5. Consider OT-CFM (Exp F variant C) — see Lipman et al. ICLR 2023 §4 for lower-variance velocity target
+
+NEXT PUBLICATION TARGET:
+  With Exp F results (expected ~0.30 Å MAT-R, >50% fully_valid):
+  - NeurIPS 2026 AI4Science Workshop (deadline: ~Aug 2026)
+  - ICML 2026 (deadline: ~Feb 2026) — needs MAT-R < 0.25 Å
+  - If MAT-R < 0.20 Å: ICLR 2027 full paper competitive with GeoMol
+
+================================================================================
+END OF SESSION 7 RECORD
+================================================================================

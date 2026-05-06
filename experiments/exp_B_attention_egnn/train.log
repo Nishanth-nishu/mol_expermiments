@@ -56,3 +56,239 @@ Epoch 050/200 | train=0.6126 (mse=0.4178 geo=1.9481) val=0.6025 | lr=8.80e-05
 Epoch 051/200 | train=0.6117 (mse=0.4159 geo=1.9579) val=0.6043 | lr=8.74e-05
 Epoch 052/200 | train=0.6128 (mse=0.4181 geo=1.9473) val=0.6096 | lr=8.69e-05
 Epoch 053/200 | train=0.6120 (mse=0.4176 geo=1.9438) val=0.6035 | lr=8.63e-05
+Epoch 054/200 | train=0.6104 (mse=0.4166 geo=1.9380) val=0.6016 | lr=8.58e-05
+Epoch 055/200 | train=0.6105 (mse=0.4169 geo=1.9361) val=0.5992 | lr=8.52e-05
+Epoch 056/200 | train=0.6083 (mse=0.4149 geo=1.9339) val=0.5899 | lr=8.46e-05
+Epoch 057/200 | train=0.6062 (mse=0.4141 geo=1.9207) val=0.6014 | lr=8.41e-05
+Epoch 058/200 | train=0.6081 (mse=0.4151 geo=1.9299) val=0.5874 | lr=8.35e-05
+Epoch 059/200 | train=0.6066 (mse=0.4146 geo=1.9200) val=0.5949 | lr=8.29e-05
+Epoch 060/200 | train=0.6050 (mse=0.4133 geo=1.9171) val=0.5913 | lr=8.22e-05
+Epoch 061/200 | train=0.6046 (mse=0.4116 geo=1.9300) val=0.5884 | lr=8.16e-05
+Epoch 062/200 | train=0.6055 (mse=0.4135 geo=1.9193) val=0.6048 | lr=8.10e-05
+Epoch 063/200 | train=0.6053 (mse=0.4136 geo=1.9175) val=0.5961 | lr=8.04e-05
+Epoch 064/200 | train=0.6011 (mse=0.4125 geo=1.8863) val=0.5956 | lr=7.97e-05
+Epoch 065/200 | train=0.5997 (mse=0.4094 geo=1.9031) val=0.5857 | lr=7.91e-05
+Epoch 066/200 | train=0.6013 (mse=0.4116 geo=1.8972) val=0.5965 | lr=7.84e-05
+Epoch 067/200 | train=0.5999 (mse=0.4104 geo=1.8956) val=0.5915 | lr=7.77e-05
+Epoch 068/200 | train=0.6007 (mse=0.4102 geo=1.9046) val=0.5914 | lr=7.71e-05
+Epoch 069/200 | train=0.5983 (mse=0.4091 geo=1.8922) val=0.5855 | lr=7.64e-05
+Epoch 070/200 | train=0.6001 (mse=0.4109 geo=1.8917) val=0.5848 | lr=7.57e-05
+Epoch 071/200 | train=0.5995 (mse=0.4109 geo=1.8854) val=0.5888 | lr=7.50e-05
+Epoch 072/200 | train=0.5991 (mse=0.4098 geo=1.8929) val=0.5842 | lr=7.43e-05
+Epoch 073/200 | train=0.5969 (mse=0.4078 geo=1.8911) val=0.5853 | lr=7.36e-05
+Epoch 074/200 | train=0.5972 (mse=0.4078 geo=1.8941) val=0.5869 | lr=7.29e-05
+Epoch 075/200 | train=0.5958 (mse=0.4072 geo=1.8863) val=0.5824 | lr=7.22e-05
+Epoch 076/200 | train=0.5950 (mse=0.4065 geo=1.8848) val=0.5825 | lr=7.14e-05
+Epoch 077/200 | train=0.5955 (mse=0.4063 geo=1.8925) val=0.5872 | lr=7.07e-05
+Epoch 078/200 | train=0.5952 (mse=0.4076 geo=1.8757) val=0.5821 | lr=7.00e-05
+Epoch 079/200 | train=0.5954 (mse=0.4071 geo=1.8825) val=0.5881 | lr=6.92e-05
+Epoch 080/200 | train=0.5924 (mse=0.4045 geo=1.8785) val=0.5807 | lr=6.85e-05
+Epoch 081/200 | train=0.5943 (mse=0.4069 geo=1.8736) val=0.5838 | lr=6.77e-05
+Epoch 082/200 | train=0.5943 (mse=0.4077 geo=1.8664) val=0.5808 | lr=6.70e-05
+Epoch 083/200 | train=0.5914 (mse=0.4053 geo=1.8607) val=0.5802 | lr=6.62e-05
+Epoch 084/200 | train=0.5906 (mse=0.4050 geo=1.8560) val=0.5872 | lr=6.55e-05
+Epoch 085/200 | train=0.5926 (mse=0.4050 geo=1.8759) val=0.5711 | lr=6.47e-05
+Epoch 086/200 | train=0.5897 (mse=0.4030 geo=1.8668) val=0.5732 | lr=6.39e-05
+Epoch 087/200 | train=0.5882 (mse=0.4030 geo=1.8522) val=0.5757 | lr=6.31e-05
+Epoch 088/200 | train=0.5885 (mse=0.4030 geo=1.8545) val=0.5714 | lr=6.24e-05
+Epoch 089/200 | train=0.5869 (mse=0.4019 geo=1.8493) val=0.5773 | lr=6.16e-05
+Epoch 090/200 | train=0.5884 (mse=0.4030 geo=1.8538) val=0.5787 | lr=6.08e-05
+Epoch 091/200 | train=0.5884 (mse=0.4029 geo=1.8544) val=0.5761 | lr=6.00e-05
+Epoch 092/200 | train=0.5870 (mse=0.4028 geo=1.8423) val=0.5723 | lr=5.92e-05
+Epoch 093/200 | train=0.5895 (mse=0.4025 geo=1.8694) val=0.5695 | lr=5.84e-05
+Epoch 094/200 | train=0.5873 (mse=0.4013 geo=1.8595) val=0.5776 | lr=5.76e-05
+Epoch 095/200 | train=0.5877 (mse=0.4018 geo=1.8589) val=0.5640 | lr=5.68e-05
+Epoch 096/200 | train=0.5890 (mse=0.4033 geo=1.8573) val=0.5721 | lr=5.60e-05
+Epoch 097/200 | train=0.5863 (mse=0.4018 geo=1.8456) val=0.5807 | lr=5.52e-05
+Epoch 098/200 | train=0.5849 (mse=0.4011 geo=1.8379) val=0.5768 | lr=5.44e-05
+Epoch 099/200 | train=0.5855 (mse=0.4004 geo=1.8510) val=0.5700 | lr=5.36e-05
+Epoch 100/200 | train=0.5828 (mse=0.3994 geo=1.8339) val=0.5729 | lr=5.28e-05
+Epoch 101/200 | train=0.5842 (mse=0.3998 geo=1.8441) val=0.5677 | lr=5.20e-05
+Epoch 102/200 | train=0.5844 (mse=0.4006 geo=1.8383) val=0.5714 | lr=5.12e-05
+Epoch 103/200 | train=0.5834 (mse=0.4007 geo=1.8269) val=0.5761 | lr=5.04e-05
+Epoch 104/200 | train=0.5826 (mse=0.4007 geo=1.8195) val=0.5707 | lr=4.96e-05
+Epoch 105/200 | train=0.5842 (mse=0.4013 geo=1.8289) val=0.5742 | lr=4.88e-05
+Epoch 106/200 | train=0.5846 (mse=0.4014 geo=1.8317) val=0.5782 | lr=4.80e-05
+Epoch 107/200 | train=0.5817 (mse=0.3998 geo=1.8191) val=0.5682 | lr=4.72e-05
+Epoch 108/200 | train=0.5814 (mse=0.3988 geo=1.8258) val=0.5678 | lr=4.64e-05
+Epoch 109/200 | train=0.5822 (mse=0.3990 geo=1.8324) val=0.5650 | lr=4.56e-05
+Epoch 110/200 | train=0.5819 (mse=0.3996 geo=1.8228) val=0.5762 | lr=4.48e-05
+Epoch 111/200 | train=0.5799 (mse=0.3978 geo=1.8207) val=0.5687 | lr=4.40e-05
+Epoch 112/200 | train=0.5800 (mse=0.3985 geo=1.8147) val=0.5697 | lr=4.32e-05
+Epoch 113/200 | train=0.5802 (mse=0.3991 geo=1.8110) val=0.5662 | lr=4.24e-05
+Epoch 114/200 | train=0.5795 (mse=0.3980 geo=1.8155) val=0.5631 | lr=4.16e-05
+Epoch 115/200 | train=0.5787 (mse=0.3965 geo=1.8222) val=0.5697 | lr=4.08e-05
+Epoch 116/200 | train=0.5773 (mse=0.3966 geo=1.8069) val=0.5677 | lr=4.00e-05
+Epoch 117/200 | train=0.5775 (mse=0.3971 geo=1.8034) val=0.5737 | lr=3.92e-05
+Epoch 118/200 | train=0.5766 (mse=0.3958 geo=1.8081) val=0.5722 | lr=3.84e-05
+Epoch 119/200 | train=0.5773 (mse=0.3975 geo=1.7989) val=0.5613 | lr=3.76e-05
+Epoch 120/200 | train=0.5775 (mse=0.3967 geo=1.8076) val=0.5645 | lr=3.69e-05
+Epoch 121/200 | train=0.5766 (mse=0.3957 geo=1.8091) val=0.5594 | lr=3.61e-05
+Epoch 122/200 | train=0.5773 (mse=0.3976 geo=1.7974) val=0.5646 | lr=3.53e-05
+Epoch 123/200 | train=0.5779 (mse=0.3974 geo=1.8057) val=0.5680 | lr=3.45e-05
+Epoch 124/200 | train=0.5758 (mse=0.3954 geo=1.8031) val=0.5705 | lr=3.38e-05
+Epoch 125/200 | train=0.5738 (mse=0.3937 geo=1.8012) val=0.5574 | lr=3.30e-05
+Epoch 126/200 | train=0.5758 (mse=0.3948 geo=1.8096) val=0.5637 | lr=3.23e-05
+Epoch 127/200 | train=0.5743 (mse=0.3952 geo=1.7913) val=0.5583 | lr=3.15e-05
+Epoch 128/200 | train=0.5738 (mse=0.3935 geo=1.8026) val=0.5613 | lr=3.08e-05
+Epoch 129/200 | train=0.5737 (mse=0.3933 geo=1.8046) val=0.5658 | lr=3.00e-05
+Epoch 130/200 | train=0.5733 (mse=0.3945 geo=1.7872) val=0.5630 | lr=2.93e-05
+Epoch 131/200 | train=0.5756 (mse=0.3965 geo=1.7906) val=0.5590 | lr=2.86e-05
+Epoch 132/200 | train=0.5744 (mse=0.3947 geo=1.7964) val=0.5662 | lr=2.78e-05
+Epoch 133/200 | train=0.5747 (mse=0.3942 geo=1.8054) val=0.5600 | lr=2.71e-05
+Epoch 134/200 | train=0.5725 (mse=0.3941 geo=1.7832) val=0.5593 | lr=2.64e-05
+Epoch 135/200 | train=0.5746 (mse=0.3954 geo=1.7923) val=0.5641 | lr=2.57e-05
+Epoch 136/200 | train=0.5743 (mse=0.3954 geo=1.7890) val=0.5530 | lr=2.50e-05
+Epoch 137/200 | train=0.5747 (mse=0.3962 geo=1.7850) val=0.5590 | lr=2.43e-05
+Epoch 138/200 | train=0.5722 (mse=0.3940 geo=1.7820) val=0.5691 | lr=2.36e-05
+Epoch 139/200 | train=0.5740 (mse=0.3950 geo=1.7898) val=0.5621 | lr=2.29e-05
+Epoch 140/200 | train=0.5725 (mse=0.3953 geo=1.7718) val=0.5681 | lr=2.23e-05
+Epoch 141/200 | train=0.5719 (mse=0.3942 geo=1.7764) val=0.5593 | lr=2.16e-05
+Epoch 142/200 | train=0.5712 (mse=0.3941 geo=1.7710) val=0.5530 | lr=2.09e-05
+Epoch 143/200 | train=0.5707 (mse=0.3943 geo=1.7646) val=0.5634 | lr=2.03e-05
+Epoch 144/200 | train=0.5714 (mse=0.3945 geo=1.7693) val=0.5596 | lr=1.96e-05
+Epoch 145/200 | train=0.5714 (mse=0.3928 geo=1.7853) val=0.5673 | lr=1.90e-05
+Epoch 146/200 | train=0.5714 (mse=0.3933 geo=1.7809) val=0.5605 | lr=1.84e-05
+Epoch 147/200 | train=0.5703 (mse=0.3925 geo=1.7786) val=0.5607 | lr=1.78e-05
+Epoch 148/200 | train=0.5691 (mse=0.3930 geo=1.7618) val=0.5593 | lr=1.71e-05
+Epoch 149/200 | train=0.5689 (mse=0.3912 geo=1.7768) val=0.5617 | lr=1.65e-05
+Epoch 150/200 | train=0.5713 (mse=0.3930 geo=1.7825) val=0.5583 | lr=1.59e-05
+Epoch 151/200 | train=0.5705 (mse=0.3921 geo=1.7843) val=0.5573 | lr=1.54e-05
+Epoch 152/200 | train=0.5690 (mse=0.3918 geo=1.7723) val=0.5523 | lr=1.48e-05
+Epoch 153/200 | train=0.5680 (mse=0.3920 geo=1.7599) val=0.5587 | lr=1.42e-05
+Epoch 154/200 | train=0.5703 (mse=0.3926 geo=1.7768) val=0.5576 | lr=1.37e-05
+Epoch 155/200 | train=0.5681 (mse=0.3918 geo=1.7637) val=0.5565 | lr=1.31e-05
+Epoch 156/200 | train=0.5677 (mse=0.3918 geo=1.7592) val=0.5494 | lr=1.26e-05
+Epoch 157/200 | train=0.5668 (mse=0.3916 geo=1.7515) val=0.5527 | lr=1.20e-05
+Epoch 158/200 | train=0.5691 (mse=0.3922 geo=1.7686) val=0.5568 | lr=1.15e-05
+Epoch 159/200 | train=0.5659 (mse=0.3904 geo=1.7550) val=0.5571 | lr=1.10e-05
+Epoch 160/200 | train=0.5670 (mse=0.3913 geo=1.7562) val=0.5623 | lr=1.05e-05
+Epoch 161/200 | train=0.5710 (mse=0.3929 geo=1.7803) val=0.5545 | lr=1.00e-05
+Epoch 162/200 | train=0.5683 (mse=0.3930 geo=1.7530) val=0.5563 | lr=9.55e-06
+Epoch 163/200 | train=0.5675 (mse=0.3910 geo=1.7651) val=0.5515 | lr=9.08e-06
+Epoch 164/200 | train=0.5661 (mse=0.3896 geo=1.7653) val=0.5515 | lr=8.62e-06
+Epoch 165/200 | train=0.5705 (mse=0.3932 geo=1.7735) val=0.5584 | lr=8.18e-06
+Epoch 166/200 | train=0.5695 (mse=0.3923 geo=1.7722) val=0.5526 | lr=7.74e-06
+Epoch 167/200 | train=0.5651 (mse=0.3896 geo=1.7552) val=0.5582 | lr=7.32e-06
+Epoch 168/200 | train=0.5672 (mse=0.3912 geo=1.7595) val=0.5532 | lr=6.90e-06
+Epoch 169/200 | train=0.5678 (mse=0.3922 geo=1.7555) val=0.5550 | lr=6.50e-06
+Epoch 170/200 | train=0.5659 (mse=0.3893 geo=1.7661) val=0.5556 | lr=6.11e-06
+Epoch 171/200 | train=0.5671 (mse=0.3914 geo=1.7572) val=0.5549 | lr=5.73e-06
+Epoch 172/200 | train=0.5666 (mse=0.3915 geo=1.7512) val=0.5512 | lr=5.36e-06
+Epoch 173/200 | train=0.5675 (mse=0.3905 geo=1.7696) val=0.5534 | lr=5.00e-06
+Epoch 174/200 | train=0.5661 (mse=0.3908 geo=1.7530) val=0.5520 | lr=4.66e-06
+Epoch 175/200 | train=0.5649 (mse=0.3904 geo=1.7443) val=0.5477 | lr=4.32e-06
+Epoch 176/200 | train=0.5645 (mse=0.3899 geo=1.7459) val=0.5572 | lr=4.00e-06
+Epoch 177/200 | train=0.5667 (mse=0.3914 geo=1.7539) val=0.5588 | lr=3.69e-06
+Epoch 178/200 | train=0.5668 (mse=0.3916 geo=1.7515) val=0.5543 | lr=3.39e-06
+Epoch 179/200 | train=0.5672 (mse=0.3908 geo=1.7642) val=0.5534 | lr=3.11e-06
+Epoch 180/200 | train=0.5658 (mse=0.3908 geo=1.7504) val=0.5489 | lr=2.83e-06
+Epoch 181/200 | train=0.5656 (mse=0.3904 geo=1.7520) val=0.5453 | lr=2.57e-06
+Epoch 182/200 | train=0.5648 (mse=0.3898 geo=1.7492) val=0.5623 | lr=2.32e-06
+Epoch 183/200 | train=0.5668 (mse=0.3900 geo=1.7683) val=0.5597 | lr=2.09e-06
+Epoch 184/200 | train=0.5651 (mse=0.3895 geo=1.7557) val=0.5518 | lr=1.86e-06
+Epoch 185/200 | train=0.5639 (mse=0.3898 geo=1.7411) val=0.5528 | lr=1.65e-06
+Epoch 186/200 | train=0.5671 (mse=0.3919 geo=1.7522) val=0.5519 | lr=1.45e-06
+Epoch 187/200 | train=0.5664 (mse=0.3900 geo=1.7637) val=0.5595 | lr=1.27e-06
+Epoch 188/200 | train=0.5666 (mse=0.3922 geo=1.7438) val=0.5444 | lr=1.09e-06
+Epoch 189/200 | train=0.5663 (mse=0.3902 geo=1.7609) val=0.5431 | lr=9.31e-07
+Epoch 190/200 | train=0.5660 (mse=0.3900 geo=1.7606) val=0.5534 | lr=7.83e-07
+Epoch 191/200 | train=0.5654 (mse=0.3900 geo=1.7534) val=0.5511 | lr=6.47e-07
+Epoch 192/200 | train=0.5661 (mse=0.3913 geo=1.7481) val=0.5482 | lr=5.25e-07
+Epoch 193/200 | train=0.5652 (mse=0.3902 geo=1.7500) val=0.5519 | lr=4.15e-07
+Epoch 194/200 | train=0.5667 (mse=0.3907 geo=1.7601) val=0.5506 | lr=3.18e-07
+Epoch 195/200 | train=0.5656 (mse=0.3911 geo=1.7457) val=0.5501 | lr=2.33e-07
+Epoch 196/200 | train=0.5662 (mse=0.3912 geo=1.7492) val=0.5497 | lr=1.62e-07
+Epoch 197/200 | train=0.5647 (mse=0.3899 geo=1.7480) val=0.5602 | lr=1.04e-07
+Epoch 198/200 | train=0.5648 (mse=0.3904 geo=1.7434) val=0.5563 | lr=5.84e-08
+Epoch 199/200 | train=0.5675 (mse=0.3915 geo=1.7603) val=0.5555 | lr=2.60e-08
+Epoch 200/200 | train=0.5645 (mse=0.3901 geo=1.7435) val=0.5508 | lr=6.49e-09
+
+Running final evaluation...
+[09:35:43] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:35:59] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:36:11] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:36:22] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:36:43] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:37:04] Can't kekulize mol.  Unkekulized atoms: 1 3 4 5 6
+[09:37:39] Can't kekulize mol.  Unkekulized atoms: 2 3 7
+[09:37:41] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:37:50] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:37:54] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:37:55] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:37:57] Explicit valence for atom # 8 N, 4, is greater than permitted
+[09:37:58] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:38:14] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:38:27] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:38:40] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:39:28] Can't kekulize mol.  Unkekulized atoms: 1 2 3 5 6
+[09:39:29] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:39:41] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:39:42] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:39:56] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:40:01] Can't kekulize mol.  Unkekulized atoms: 4 6 7
+[09:40:08] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:40:13] Can't kekulize mol.  Unkekulized atoms: 2 3 4 6 7
+[09:40:17] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:40:18] Can't kekulize mol.  Unkekulized atoms: 1 2 3 4 7
+[09:40:28] Explicit valence for atom # 0 N, 4, is greater than permitted
+[09:40:47] Can't kekulize mol.  Unkekulized atoms: 1 5 6
+[09:40:54] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:41:04] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:41:32] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:41:48] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:42:01] Can't kekulize mol.  Unkekulized atoms: 1 2 3 6 7
+[09:42:15] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:42:26] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:42:45] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:43:02] Can't kekulize mol.  Unkekulized atoms: 2 3 4 5 6
+[09:43:33] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:43:34] Can't kekulize mol.  Unkekulized atoms: 2 3 5 6 7
+[09:43:53] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:44:17] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:44:18] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:44:51] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:44:53] Can't kekulize mol.  Unkekulized atoms: 1 2 4 6 7
+[09:44:56] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:45:04] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:45:18] Can't kekulize mol.  Unkekulized atoms: 2 3 4 5 6
+[09:45:21] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:45:24] Can't kekulize mol.  Unkekulized atoms: 1 2 6
+[09:45:28] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:45:33] Can't kekulize mol.  Unkekulized atoms: 3 4 7
+[09:45:56] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:46:06] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:46:10] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:46:35] Can't kekulize mol.  Unkekulized atoms: 2 4 5
+[09:46:38] Molecule does not have explicit Hs. Consider calling AddHs()
+[09:46:42] Molecule does not have explicit Hs. Consider calling AddHs()
+  Eval [500/500] 695s
+
+── Eval [exp_B_attention_egnn] ────────────────────────────────────────
+  n_evaluated       : 500
+  RDKit valid       :   96.6%
+  Bond valid (0.2Å) :   16.6%
+  Clash-free        :   68.4%
+  Fully valid ←PRIMARY:   13.6%
+  Mean bond error   : 0.2265 Å
+  COV-R             :   27.0%
+  MAT-R ←SECONDARY  : 0.6540 Å
+  Kabsch-RMSD       : 0.8665 ± 0.2992 Å
+  MMFF strain       : 4078.26 kcal/mol (483 mols)
+
+---
+fully_valid:    0.136000
+mat_r:          0.654047
+rmsd_mean:      0.866484
+strain_kcal:    4078.261663
+cov_r:          0.270000
+validity:       0.966000
+bond_error:     0.226457
+training_secs:  75260.9
+total_secs:     75963.2
+peak_vram_mb:   252.8
+num_epochs:     200
+num_params_M:   2.82
+optimizer:      adamw
+geometry_weight:0.1
+exp_name:       exp_B_attention_egnn

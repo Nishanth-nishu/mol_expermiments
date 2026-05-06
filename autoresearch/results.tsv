@@ -5,3 +5,6 @@ nocommit	0.130000	0.666820	0.908562	10309.70	0.220000	0.966000	0.229507	keep	Exp
 nocommit	0.142000	0.649521	0.872419	5025.24	0.278000	0.966000	0.226701	keep	Exp B: EQGAT-diff attention EGNN 4-heads 50ep [pre-fix]
 nocommit	0.000000	0.843994	0.994105	66656.65	0.026000	0.966000	0.313258	discard	Exp C: CFM Euler ODE 20steps 50ep [pre-fix: geo_w=0.05 caused instability]
 nocommit	0.006000	0.723815	0.856785	28163.29	0.136000	0.966000	0.297742	discard	Exp C: CFM Euler ODE 20steps 50ep [pre-fix: geo_w=0.05 caused instability]
+nocommit	0.000000	0.756584	0.880697	120834.73	0.080000	0.966000	0.399003	discard	Exp C: flow matching CFM Euler ODE 20steps 50ep
+nocommit	0.140000	0.638087	0.879632	34250.13	0.278000	0.966000	0.230094	keep	Exp A: fixed baseline DDPM AdamW 50ep
+nocommit	0.136000	0.654047	0.866484	4078.26	0.270000	0.966000	0.226457	keep	Exp B: EQGAT-diff attention EGNN 4-heads 50ep

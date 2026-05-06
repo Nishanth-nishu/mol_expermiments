@@ -47,11 +47,12 @@ SAVE_BEST        = True
 
 
 def get_lr(epoch, base_lr):
-    """Cosine LR schedule with linear warmup, identical to Exp A/B/C/D."""
+    """Cosine LR schedule with warmup and floor (FIX-AUDIT-5)."""
     if epoch < WARMUP_EPOCHS:
         return base_lr * (epoch + 1) / max(WARMUP_EPOCHS, 1)
     progress = (epoch - WARMUP_EPOCHS) / max(1, EPOCHS - WARMUP_EPOCHS)
-    return base_lr * 0.5 * (1 + math.cos(math.pi * progress))
+    cosine_lr = base_lr * 0.5 * (1 + math.cos(math.pi * progress))
+    return max(cosine_lr, base_lr * 0.01)  # floor at 1% of peak LR (FIX-AUDIT-5)
 
 
 def main():
