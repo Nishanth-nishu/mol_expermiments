@@ -124,9 +124,9 @@ class AttnEquivariantLayer(nn.Module):
         x_agg = torch.zeros_like(x)
         x_agg.scatter_add_(0, col.unsqueeze(-1).expand(-1, 3), coord_update)
 
-        degree = torch.zeros(N, 1, device=x.device)
+        degree = torch.zeros(N, 1, dtype=x.dtype, device=x.device)
         degree.scatter_add_(0, col.unsqueeze(-1),
-                            torch.ones(E, 1, device=x.device))
+                            torch.ones(E, 1, dtype=x.dtype, device=x.device))
         degree = (degree / 2.0).clamp(min=1.0)
         x_new = x + x_agg / degree
 
@@ -142,12 +142,12 @@ class AttnEquivariantLayer(nn.Module):
     def _scatter_softmax(logits: torch.Tensor, index: torch.Tensor,
                          num_nodes: int) -> torch.Tensor:
         E, H = logits.shape
-        max_logits = torch.full((num_nodes, H), float('-inf'), device=logits.device)
+        max_logits = torch.full((num_nodes, H), float('-inf'), dtype=logits.dtype, device=logits.device)
         max_logits.scatter_reduce_(0, index.unsqueeze(-1).expand(-1, H),
                                    logits, reduce='amax', include_self=True)
         shifted = logits - max_logits[index]
         exp_logits = shifted.exp()
-        exp_sum = torch.zeros(num_nodes, H, device=logits.device)
+        exp_sum = torch.zeros(num_nodes, H, dtype=logits.dtype, device=logits.device)
         exp_sum.scatter_add_(0, index.unsqueeze(-1).expand(-1, H), exp_logits)
         attn = exp_logits / (exp_sum[index] + 1e-8)
         return attn
@@ -225,10 +225,10 @@ class AttnConformerDenoiser(nn.Module):
         B = int(batch_idx.max().item()) + 1
         N = h.size(0)
         g_feat = self.global_mlp(h)                          # (N, H//4)
-        g_sum = torch.zeros(B, g_feat.size(-1), device=h.device)
-        g_cnt = torch.zeros(B, 1, device=h.device)
+        g_sum = torch.zeros(B, g_feat.size(-1), dtype=g_feat.dtype, device=h.device)
+        g_cnt = torch.zeros(B, 1, dtype=g_feat.dtype, device=h.device)
         g_sum.scatter_add_(0, batch_idx.unsqueeze(-1).expand(-1, g_feat.size(-1)), g_feat)
-        g_cnt.scatter_add_(0, batch_idx.unsqueeze(-1), torch.ones(N, 1, device=h.device))
+        g_cnt.scatter_add_(0, batch_idx.unsqueeze(-1), torch.ones(N, 1, dtype=g_feat.dtype, device=h.device))
         g_mean = g_sum / g_cnt.clamp(min=1)                  # (B, H//4) global embedding
         h_global = torch.cat([h, g_mean[batch_idx]], dim=-1) # (N, H + H//4)
 
@@ -344,10 +344,10 @@ class AttnConformerDiffusion(nn.Module):
         # Reference: EDM App. B — x₀ parameterization loss is MSE(x₀_pred, x₀)
         x0_err_per_atom = ((x_0_pred - x_0) ** 2).sum(-1)   # (N,)
 
-        mse_per_mol = torch.zeros(B, device=device)
-        mol_counts  = torch.zeros(B, device=device)
+        mse_per_mol = torch.zeros(B, dtype=x0_err_per_atom.dtype, device=device)
+        mol_counts  = torch.zeros(B, dtype=x0_err_per_atom.dtype, device=device)
         mse_per_mol.scatter_add_(0, batch_idx, x0_err_per_atom)
-        mol_counts.scatter_add_(0, batch_idx, torch.ones(x0_err_per_atom.size(0), device=device))
+        mol_counts.scatter_add_(0, batch_idx, torch.ones(x0_err_per_atom.size(0), dtype=x0_err_per_atom.dtype, device=device))
         mse_per_mol = mse_per_mol / mol_counts.clamp(min=1)
 
         # Min-SNR weighting (Hang et al. 2023) — scale by SNR(t)

@@ -46,7 +46,15 @@ import torch.nn.functional as F
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data.distributed import DistributedSampler
-from torch.cuda.amp import GradScaler, autocast
+from torch.cuda.amp import GradScaler
+try:
+    from torch.amp import autocast as torch_autocast   # PyTorch >= 2.0
+    def make_amp_ctx(device_type):
+        return torch_autocast(device_type=device_type, dtype=torch.float16)
+except ImportError:
+    from torch.cuda.amp import autocast as cuda_autocast  # PyTorch < 2.0
+    def make_amp_ctx(device_type):
+        return cuda_autocast(dtype=torch.float16) if device_type == 'cuda' else nullcontext()
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -412,8 +420,7 @@ def main():
         weight_decay=cfg['weight_decay'],
     )
     scaler = GradScaler()  # AMP gradient scaler (fp16 training)
-    amp_ctx = autocast(device_type='cuda', dtype=torch.float16) \
-              if device.type == 'cuda' else nullcontext()
+    amp_ctx = make_amp_ctx('cuda') if device.type == 'cuda' else nullcontext()
 
     # ── Training loop ────────────────────────────────────────────────────────
     os.makedirs(CHECKPOINT_DIR, exist_ok=True)

@@ -4,25 +4,62 @@
   Device: cuda:0
   Config: SOTA: heavy-atom-only QM9, AttnEGNN hidden=384 L=8, torsions, DDP+AMP
 ============================================================
+NCCL version 2.21.5+cuda12.4
+/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py:422: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # AMP gradient scaler (fp16 training)
+  Parameters: 8.36M
+/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py:422: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # AMP gradient scaler (fp16 training)
 [rank1]: Traceback (most recent call last):
-[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 513, in <module>
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 532, in <module>
 [rank1]:     main()
-[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 373, in main
-[rank1]:     train_loader.sampler = DistributedSampler(
-[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 463, in __setattr__
-[rank1]:     raise ValueError(
-[rank1]: ValueError: sampler attribute should not be set after DataLoader is initialized
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 445, in main
+[rank1]:     train_loss, train_mse, train_geo = train_one_epoch(
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 257, in train_one_epoch
+[rank1]:     loss_dict = raw_model.get_loss(
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 340, in get_loss
+[rank1]:     x_0_pred = self.denoiser(x_t, t, atom_types, edge_index, bond_types, batch_idx)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 222, in forward
+[rank1]:     h, x = layer(h, x, edge_index, bond_feat)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 114, in forward
+[rank1]:     attn_weights = self._scatter_softmax(attn_logits, col, N)
+[rank1]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 146, in _scatter_softmax
+[rank1]:     max_logits.scatter_reduce_(0, index.unsqueeze(-1).expand(-1, H),
+[rank1]: RuntimeError: scatter(): Expected self.dtype to be equal to src.dtype
 [rank0]: Traceback (most recent call last):
-[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 513, in <module>
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 532, in <module>
 [rank0]:     main()
-[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 373, in main
-[rank0]:     train_loader.sampler = DistributedSampler(
-[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 463, in __setattr__
-[rank0]:     raise ValueError(
-[rank0]: ValueError: sampler attribute should not be set after DataLoader is initialized
-[rank0]:[W506 16:32:03.313394243 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
-W0506 16:32:03.354000 1135537 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1135545 closing signal SIGTERM
-E0506 16:32:03.919000 1135537 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 1135546) of binary: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/bin/python3
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 445, in main
+[rank0]:     train_loss, train_mse, train_geo = train_one_epoch(
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_ddp.py", line 257, in train_one_epoch
+[rank0]:     loss_dict = raw_model.get_loss(
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 340, in get_loss
+[rank0]:     x_0_pred = self.denoiser(x_t, t, atom_types, edge_index, bond_types, batch_idx)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 222, in forward
+[rank0]:     h, x = layer(h, x, edge_index, bond_feat)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 114, in forward
+[rank0]:     attn_weights = self._scatter_softmax(attn_logits, col, N)
+[rank0]:   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/models/attn_conformer_diffusion.py", line 146, in _scatter_softmax
+[rank0]:     max_logits.scatter_reduce_(0, index.unsqueeze(-1).expand(-1, H),
+[rank0]: RuntimeError: scatter(): Expected self.dtype to be equal to src.dtype
+W0506 17:12:58.463000 1143306 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1143319 closing signal SIGTERM
+E0506 17:12:58.978000 1143306 venv/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 1143320) of binary: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/bin/python3
 Traceback (most recent call last):
   File "/scratch/nishanth.r/nextmol_experiment/mol_next_gen/venv/bin/torchrun", line 6, in <module>
     sys.exit(main())
@@ -45,10 +82,10 @@ Failures:
 ------------------------------------------------------------
 Root Cause (first observed failure):
 [0]:
-  time      : 2026-05-06_16:32:03
+  time      : 2026-05-06_17:12:58
   host      : gnode118.local
   rank      : 1 (local_rank: 1)
-  exitcode  : 1 (pid: 1135546)
+  exitcode  : 1 (pid: 1143320)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 ============================================================
