@@ -1,0 +1,33 @@
+[W&B] Run: https://wandb.ai/kgrlucifer2025-kgrcet/mol_gen/runs/cpi6x12h
+
+=================================================================
+  Experiment G — SOTA DDP Training
+  GPUs: 2  |  Per-GPU batch: 128  |  Effective batch: 256
+  Model: ConformerDiffusion hidden=384 layers=8
+  Dataset: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/data/qm9_heavy.jsonl (max_atoms=9)
+  Epochs: 500 | LR: 0.0005 | geo_w: 0.5
+=================================================================
+  Train batches/GPU: 464 | Val batches: 104
+  Parameters: 8.28M
+/scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/mol_train_expG_ddp.py:233: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler  = GradScaler()
+  GeoDiff eval set: 300 molecules
+Epoch 001/500 | train=2.7026 (mse=1.4346 geo=2.5359) val=2.0560 | lr=5.00e-05
+Epoch 002/500 | train=2.0822 (mse=1.2431 geo=1.6782) val=1.9463 | lr=1.00e-04
+Epoch 003/500 | train=1.9734 (mse=1.1772 geo=1.5924) val=1.8763 | lr=1.50e-04
+Epoch 004/500 | train=1.8972 (mse=1.1288 geo=1.5370) val=1.8665 | lr=2.00e-04
+Epoch 005/500 | train=1.8561 (mse=1.0983 geo=1.5155) val=1.8196 | lr=2.50e-04
+Epoch 006/500 | train=1.8174 (mse=1.0831 geo=1.4686) val=1.7427 | lr=3.00e-04
+Epoch 007/500 | train=1.7555 (mse=1.0335 geo=1.4440) val=1.7295 | lr=3.50e-04
+Epoch 008/500 | train=1.7013 (mse=0.9948 geo=1.4131) val=1.6751 | lr=4.00e-04
+Epoch 009/500 | train=1.6601 (mse=0.9644 geo=1.3914) val=1.6538 | lr=4.50e-04
+Epoch 010/500 | train=1.6467 (mse=0.9477 geo=1.3981) val=1.6447 | lr=5.00e-04
+Epoch 011/500 | train=1.6237 (mse=0.9264 geo=1.3945) val=1.5883 | lr=5.00e-04
+Epoch 012/500 | train=1.5951 (mse=0.9036 geo=1.3830) val=1.5763 | lr=5.00e-04
+Epoch 013/500 | train=1.5737 (mse=0.8855 geo=1.3763) val=1.5217 | lr=5.00e-04
+Epoch 014/500 | train=1.5645 (mse=0.8770 geo=1.3750) val=1.5378 | lr=5.00e-04
+Epoch 015/500 | train=1.5358 (mse=0.8526 geo=1.3665) val=1.5129 | lr=5.00e-04
+Epoch 016/500 | train=1.5384 (mse=0.8497 geo=1.3774) val=1.4937 | lr=5.00e-04
+Epoch 017/500 | train=1.5097 (mse=0.8317 geo=1.3561) val=1.4760 | lr=5.00e-04
+Epoch 018/500 | train=1.4894 (mse=0.8119 geo=1.3550) val=1.4761 | lr=5.00e-04
+Epoch 019/500 | train=1.4932 (mse=0.8143 geo=1.3578) val=1.4676 | lr=5.00e-04

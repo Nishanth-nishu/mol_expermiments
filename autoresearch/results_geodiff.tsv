@@ -1,0 +1,2 @@
+ckpt	cov_r_05	mat_r_mean	mat_r_med	cov_p_05	mat_p_mean	n_evaluated	description
+exp_A_baseline_best.pt	1.000000	0.185852	0.182123	0.988000	0.209352	100	ExpA baseline smoke-test heavy-atom

@@ -509,79 +509,61 @@ class GeometryConstraints:
                                edge_index: torch.Tensor,
                                batch_idx: torch.Tensor) -> torch.Tensor:
         """
-        Steric repulsion loss — computed PER MOLECULE to fix the N>300 skip bug.
+        Steric repulsion loss — fully vectorized over the whole batch.
 
-        BUG FIX: Old code checked `if N > 300: skip` where N is the WHOLE BATCH
-        (64 molecules × ~15 atoms = 960 atoms → always skipped!).  Now we loop
-        over molecules and only compute repulsion for each molecule individually.
-        QM9 molecules have ≤ 29 heavy atoms, so per-mol N ≤ 29 is always fast.
+        Strategy: Build a (N, N) pairwise-distance matrix for atoms in the
+        SAME molecule only (same batch_idx), mask out bonded and 1-3 pairs,
+        then penalize any pair whose distance is below the VDW clash threshold.
 
-        Excludes:
-          1-2 pairs (bonded) — handled by bond loss
-          1-3 pairs (A-B-C)  — natural geometry, not clashes
+        No Python loops over molecules — O(N²) GPU operations only.
+        For heavy-atom QM9 with max 9 atoms and batch_size 128:
+            N_total ≤ 1152, N² ≤ 1.3M — negligible VRAM at fp32.
         """
         device = pos.device
+        N = pos.size(0)
         row, col = edge_index
-        B = int(batch_idx.max().item()) + 1
 
-        mol_losses = []
+        # ── 1. same-molecule mask (i, j in same molecule) ─────────────────────
+        same_mol = (batch_idx.unsqueeze(1) == batch_idx.unsqueeze(0))  # (N, N)
 
-        for mol_b in range(B):
-            mol_mask = (batch_idx == mol_b)
-            N_mol = int(mol_mask.sum().item())
+        # ── 2. bonded (1-2) mask ──────────────────────────────────────────────
+        bonded_12 = torch.zeros(N, N, device=device, dtype=torch.bool)
+        bonded_12[row, col] = True
+        bonded_12[col, row] = True
 
-            if N_mol < 2:
-                continue
+        # ── 3. 1-3 mask via one matmul ────────────────────────────────────────
+        adj_f     = bonded_12.float()
+        bonded_13 = (adj_f @ adj_f).bool() & ~bonded_12
 
-            mol_pos = pos[mol_mask]                    # (N_mol, 3)
-            mol_at  = atom_types[mol_mask]             # (N_mol,)
+        # ── 4. exclude self, bonded, 1-3, cross-mol ───────────────────────────
+        eye       = torch.eye(N, device=device, dtype=torch.bool)
+        nb_mask   = same_mol & ~eye & ~bonded_12 & ~bonded_13  # (N, N)
 
-            # Local edge_index for this molecule
-            edge_mask = mol_mask[row] & mol_mask[col]
-            if not edge_mask.any():
-                continue
-
-            # Re-index edges to local 0-based indices
-            local_map = torch.full((pos.size(0),), -1, dtype=torch.long, device=device)
-            local_map[mol_mask.nonzero(as_tuple=True)[0]] = torch.arange(N_mol, device=device)
-            local_row = local_map[row[edge_mask]]
-            local_col = local_map[col[edge_mask]]
-
-            # Build 1-2 mask (bonded)
-            bonded_12 = torch.zeros(N_mol, N_mol, device=device, dtype=torch.bool)
-            bonded_12[local_row, local_col] = True
-
-            # Build 1-3 mask via adjacency matmul
-            adj_f = bonded_12.float()
-            bonded_13 = (adj_f @ adj_f).bool() & ~bonded_12 & ~torch.eye(N_mol, device=device, dtype=torch.bool)
-
-            excluded = bonded_12 | bonded_13 | torch.eye(N_mol, device=device, dtype=torch.bool)
-            nb_mask = ~excluded
-
-            if not nb_mask.any():
-                continue
-
-            all_dists = torch.cdist(mol_pos, mol_pos)   # (N_mol, N_mol)
-
-            atom_vdw = torch.tensor(
-                [VDW_RADII.get(a.item(), DEFAULT_VDW) for a in mol_at],
-                device=device, dtype=pos.dtype
-            )
-            vdw_thresh = (atom_vdw.unsqueeze(0) + atom_vdw.unsqueeze(1)) * 0.70
-
-            nb_dists  = all_dists[nb_mask]
-            thresh    = vdw_thresh[nb_mask]
-
-            clashing = nb_dists < thresh
-            if clashing.any():
-                clash_dists  = nb_dists[clashing]
-                clash_thresh = thresh[clashing]
-                mol_losses.append(torch.mean((clash_thresh - clash_dists) ** 2))
-
-        if not mol_losses:
+        if not nb_mask.any():
             return torch.tensor(0.0, device=device)
 
-        loss = torch.stack(mol_losses).mean()
+        # ── 5. pairwise distances & VDW thresholds ────────────────────────────
+        all_dists = torch.cdist(pos, pos)          # (N, N)
+
+        # Vectorized VDW radius lookup
+        vdw_default = DEFAULT_VDW
+        vdw_table   = torch.full((54,), vdw_default, device=device, dtype=pos.dtype)
+        for z, r in VDW_RADII.items():
+            if z < 54:
+                vdw_table[z] = r
+        at_clamped  = atom_types.clamp(0, 53).long()
+        vdw_radii_v = vdw_table[at_clamped]        # (N,)
+        vdw_thresh  = (vdw_radii_v.unsqueeze(1) + vdw_radii_v.unsqueeze(0)) * 0.70  # (N, N)
+
+        # ── 6. clash penalty ──────────────────────────────────────────────────
+        nb_dists  = all_dists[nb_mask]
+        thresh    = vdw_thresh[nb_mask]
+        clash_pen = torch.relu(thresh - nb_dists)  # 0 for OK, >0 for clash
+
+        if clash_pen.max() < 1e-6:
+            return torch.tensor(0.0, device=device)
+
+        loss = (clash_pen ** 2).mean()
         return self.repulsion_weight * loss
 
     # =========================================================================
@@ -758,7 +740,14 @@ class GeometryConstraints:
             chiral_centers: Optional[List[Tuple]] = None,
             small_rings: Optional[List[List[int]]] = None,
     ) -> Tuple[torch.Tensor, Dict[str, float]]:
-        """Compute total geometry constraint loss with full breakdown."""
+        """Compute total geometry constraint loss with full breakdown.
+
+        Fast path: bond + repulsion (both fully vectorized).
+        Angles: vectorized triplet scan (small Python setup, one GPU call).
+        Torsions: disabled by default — pure Python loop, use only for debug.
+        Soft constraints (planarity/chirality/ring-strain): skipped when
+        the corresponding argument is None (the common case during training).
+        """
         bond_loss = self.compute_bond_loss(pos, atom_types, edge_index, bond_types)
         repulsion_loss = self.compute_repulsion_loss(pos, atom_types, edge_index, batch_idx)
 
@@ -780,18 +769,21 @@ class GeometryConstraints:
             total_loss = total_loss + torsion_loss
             breakdown['torsion_loss'] = torsion_loss.item()
 
-        # Soft constraints (Exp-1)
-        planarity_loss = self.compute_planarity_loss(pos, aromatic_rings)
-        total_loss = total_loss + planarity_loss
-        breakdown['planarity_loss'] = planarity_loss.item()
+        # Soft constraints — only when explicitly passed (not during normal training)
+        if aromatic_rings is not None:
+            planarity_loss = self.compute_planarity_loss(pos, aromatic_rings)
+            total_loss = total_loss + planarity_loss
+            breakdown['planarity_loss'] = planarity_loss.item()
 
-        chirality_loss = self.compute_chirality_loss(pos, chiral_centers)
-        total_loss = total_loss + chirality_loss
-        breakdown['chirality_loss'] = chirality_loss.item()
+        if chiral_centers is not None:
+            chirality_loss = self.compute_chirality_loss(pos, chiral_centers)
+            total_loss = total_loss + chirality_loss
+            breakdown['chirality_loss'] = chirality_loss.item()
 
-        ring_strain_loss = self.compute_ring_strain_loss(pos, small_rings)
-        total_loss = total_loss + ring_strain_loss
-        breakdown['ring_strain_loss'] = ring_strain_loss.item()
+        if small_rings is not None:
+            ring_strain_loss = self.compute_ring_strain_loss(pos, small_rings)
+            total_loss = total_loss + ring_strain_loss
+            breakdown['ring_strain_loss'] = ring_strain_loss.item()
 
         breakdown['total_loss'] = total_loss.item()
         return total_loss, breakdown

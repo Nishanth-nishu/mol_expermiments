@@ -2,7 +2,7 @@
 data/*.jsonl
 data/*.pkl
 data/*.pt
-data/*.sdf
+**/*.sdf
 data/*.gz
 
 # Model checkpoints — large, node-local

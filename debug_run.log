@@ -1,0 +1,10 @@
+[ExpG] Using heavy-atom dataset: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/data/qm9_heavy.jsonl
+Import OK
+Device: cuda
+Experiment: exp_G_heavy_atom_sota
+Dataset: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/data/qm9_heavy.jsonl (max_atoms=9)
+Config: hidden=384 layers=8 rbf=32 timesteps=1000 epochs=500 lr=0.0005 warmup=10 geo_w=0.5 torsions=True
+Train batches: 928 | Val batches: 104
+Parameters: 8.28M
+Optimizer: AdamW | lr=0.0005, wd=0.01
+Loaded 300 molecules for GeoDiff eval

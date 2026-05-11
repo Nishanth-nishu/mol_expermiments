@@ -27,9 +27,9 @@ PROJECT_ROOT = os.path.dirname(_HERE)
 DATA_PATH      = Path(os.environ.get("MOL_DATASET", os.path.join(PROJECT_ROOT, "data", "qm9_selfies.jsonl")))
 CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, "checkpoints")
 
-MAX_ATOMS      = 29    # QM9 with explicit-H: max is 29 atoms (9 heavy + ~20 H)
-                       # BUG-FIX: was 15, which filtered 80% of QM9 molecules
-                       # Actual distribution: ≤15 atoms = 19.7%, ≤29 = 100%
+MAX_ATOMS      = int(os.environ.get("MOL_MAX_ATOMS", 29))
+                       # Set MOL_MAX_ATOMS=9 for heavy-atom-only training (SOTA default)
+                       # Default 29: explicit-H QM9 (all atoms including hydrogen)
 VAL_SPLIT      = 0.1   # 10 % validation
 RANDOM_SEED    = 42
 EVAL_MOLECULES = 500   # fixed evaluation set size (comparable across all experiments)
