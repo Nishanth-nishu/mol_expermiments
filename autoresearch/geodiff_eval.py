@@ -95,9 +95,14 @@ def covmat_single_molecule(ref_conformers: list, gen_conformers: list,
 # ─────────────────────────────────────────────────────────────────────────────
 
 def load_dataset(data_path: str, max_atoms: int = 9, max_mols: int = 500):
-    """Load molecules from JSONL, return list of dicts."""
+    """
+    Load molecules from JSONL, returning ONLY the validation split
+    to prevent Train/Test Leakage. Replicates mol_prepare.py split logic.
+    """
     import json
-    mols = []
+    import torch
+    
+    all_mols = []
     with open(data_path) as f:
         for line in f:
             item = json.loads(line.strip())
@@ -105,12 +110,21 @@ def load_dataset(data_path: str, max_atoms: int = 9, max_mols: int = 500):
                 continue
             if item.get('num_atoms', len(item['atom_types'])) > max_atoms:
                 continue
-            if len(item.get('atom_types', [])) < 2:
+            ats = item.get('atom_types', [])
+            if any(z >= 54 or z <= 0 for z in ats):
                 continue
-            mols.append(item)
-            if len(mols) >= max_mols:
-                break
-    return mols
+            all_mols.append(item)
+
+    # Replicate EXACT random_split from mol_prepare.py
+    n_val = int(len(all_mols) * 0.1)  # VAL_SPLIT = 0.1
+    n_train = len(all_mols) - n_val
+    gen = torch.Generator().manual_seed(42)  # RANDOM_SEED = 42
+    
+    indices = torch.randperm(len(all_mols), generator=gen).tolist()
+    val_indices = indices[n_train:]
+    
+    val_mols = [all_mols[i] for i in val_indices]
+    return val_mols[:max_mols]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -350,6 +364,7 @@ def main():
         hidden_dim=config.get('hidden_dim', 256),
         num_layers=config.get('num_layers', 6),
         time_dim=config.get('time_dim', 128),
+        num_rbf=config.get('num_rbf', 20),
     ).to(device)
     model.load_state_dict(ckpt['model_state_dict'])
     model.eval()
