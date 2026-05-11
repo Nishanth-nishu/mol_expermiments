@@ -103,17 +103,7 @@ ENV CUDA_VISIBLE_DEVICES=all
 
 # ── Smoke test at build time ───────────────────────────────────────────────────
 # Verify key imports work (no GPU needed for this)
-RUN python3 -c "
-import torch
-print(f'PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}')
-import rdkit; print(f'RDKit {rdkit.__version__}')
-import numpy; print(f'NumPy {numpy.__version__}')
-from models.conformer_diffusion import ConformerDiffusion
-print('ConformerDiffusion: OK')
-from models.attn_conformer_diffusion import AttnConformerDiffusion
-print('AttnConformerDiffusion: OK')
-print('ALL IMPORTS OK')
-"
+RUN python3 -c "import torch; print(f'PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}'); import rdkit; print(f'RDKit {rdkit.__version__}'); import numpy; print(f'NumPy {numpy.__version__}'); from models.conformer_diffusion import ConformerDiffusion; print('ConformerDiffusion: OK'); from models.attn_conformer_diffusion import AttnConformerDiffusion; print('AttnConformerDiffusion: OK'); print('ALL IMPORTS OK')"
 
 # ── Default command ───────────────────────────────────────────────────────────
 # Override with any of:
