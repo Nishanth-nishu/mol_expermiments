@@ -156,10 +156,28 @@ def run_geodiff_eval(model, dataset: list, device: torch.device,
 
     model.eval()
 
-    all_cov_r = []
-    all_mat_r = []
-    all_cov_p = []
-    all_mat_p = []
+    # Helper to calculate rotatable bonds
+    def count_rotatable_bonds(anums, esrc, edst, ebo):
+        try:
+            from rdkit import Chem
+            em = Chem.RWMol()
+            for z in anums: em.AddAtom(Chem.Atom(int(z)))
+            BT = {1: Chem.rdchem.BondType.SINGLE, 2: Chem.rdchem.BondType.DOUBLE,
+                  3: Chem.rdchem.BondType.TRIPLE, 4: Chem.rdchem.BondType.AROMATIC}
+            seen = set()
+            for i,j,bo in zip(esrc, edst, ebo):
+                k=(min(i,j),max(i,j))
+                if k not in seen:
+                    seen.add(k)
+                    em.AddBond(i, j, BT.get(int(bo), Chem.rdchem.BondType.SINGLE))
+            mol = em.GetMol()
+            Chem.SanitizeMol(mol)
+            return Chem.rdMolDescriptors.CalcNumRotatableBonds(mol)
+        except:
+            return 0
+
+    all_cov_r, all_mat_r, all_cov_p, all_mat_p = [], [], [], []
+    all_div, all_N, all_rot = [], [], []
 
     iterator = tqdm(dataset, desc="COV-MAT Eval") if verbose else dataset
 
@@ -168,91 +186,86 @@ def run_geodiff_eval(model, dataset: list, device: torch.device,
             atom_types = torch.tensor(item['atom_types'], dtype=torch.long, device=device)
             ref_pos = np.array(item['coordinates'], dtype=np.float32)
             
-            # Build edge_index: shape [2, E]
             ei_raw = item['edge_index']
-            if len(ei_raw) == 0:
-                continue
+            if len(ei_raw) == 0: continue
             ei_arr = np.array(ei_raw)
-            # ei_raw from our JSONL is already [E, 2] (list of [src, dst] pairs)
             if ei_arr.ndim == 2 and ei_arr.shape[1] == 2:
                 edge_index = torch.tensor(ei_arr.T, dtype=torch.long, device=device)
             else:
                 edge_index = torch.tensor(ei_arr, dtype=torch.long, device=device)
-                if edge_index.shape[0] != 2:
-                    edge_index = edge_index.T
+                if edge_index.shape[0] != 2: edge_index = edge_index.T
 
             bond_types = torch.tensor(item['bond_types'], dtype=torch.long, device=device)
             N = atom_types.shape[0]
             batch_idx = torch.zeros(N, dtype=torch.long, device=device)
 
-            # Reference conformer (single DFT geometry)
-            ref_pos_centered = ref_pos - ref_pos.mean(0)
-            ref_conformers = [ref_pos_centered]
+            ref_conformers = [ref_pos - ref_pos.mean(0)]
 
-            # Generate multiple conformers from model
             gen_conformers = []
             for _ in range(num_gen_per_mol):
                 try:
-                    gen = model.ddim_sample(
-                        atom_types, edge_index, bond_types, batch_idx,
-                        num_steps=50
-                    )
+                    gen = model.ddim_sample(atom_types, edge_index, bond_types, batch_idx, num_steps=50)
                     gen_np = gen.cpu().numpy()
-                    gen_np = gen_np - gen_np.mean(0)  # center
-                    gen_conformers.append(gen_np)
-                except Exception as e:
-                    continue
+                    gen_conformers.append(gen_np - gen_np.mean(0))
+                except Exception: continue
 
-            if len(gen_conformers) == 0:
-                continue
+            if len(gen_conformers) == 0: continue
 
-            # Compute COV-MAT
-            cov_r, mat_r, cov_p, mat_p = covmat_single_molecule(
-                ref_conformers, gen_conformers, thresholds
-            )
-            all_cov_r.append(cov_r)
-            all_mat_r.append(mat_r)
-            all_cov_p.append(cov_p)
-            all_mat_p.append(mat_p)
+            cov_r, mat_r, cov_p, mat_p = covmat_single_molecule(ref_conformers, gen_conformers, thresholds)
+            
+            # Pairwise Diversity
+            div_rmsd = [kabsch_align(gen_conformers[i], gen_conformers[j]) 
+                        for i in range(len(gen_conformers)) for j in range(i+1, len(gen_conformers))]
+            div_score = float(np.mean(div_rmsd)) if div_rmsd else 0.0
+
+            # Rotatable bonds
+            esrc = edge_index[0].cpu().tolist()
+            edst = edge_index[1].cpu().tolist()
+            ebo = bond_types.cpu().tolist()
+            anums = atom_types.cpu().tolist()
+            rot_bonds = count_rotatable_bonds(anums, esrc, edst, ebo)
+
+            all_cov_r.append(cov_r); all_mat_r.append(mat_r)
+            all_cov_p.append(cov_p); all_mat_p.append(mat_p)
+            all_div.append(div_score); all_N.append(N); all_rot.append(rot_bonds)
 
         except Exception as e:
-            if verbose:
-                print(f"  [skip] {e}")
             continue
 
-    if len(all_mat_r) == 0:
-        return {'error': 'no molecules evaluated', 'n_evaluated': 0}
+    if len(all_mat_r) == 0: return {'error': 'no molecules evaluated', 'n_evaluated': 0}
 
-    cov_r_arr = np.stack(all_cov_r)   # (n_mols, n_thresholds)
-    cov_p_arr = np.stack(all_cov_p)   # (n_mols, n_thresholds)
-    mat_r_arr = np.array(all_mat_r)   # (n_mols,)
-    mat_p_arr = np.array(all_mat_p)   # (n_mols,)
-
-    # COV at standard 0.5 Å threshold (index at thr=0.5)
-    thr_05_idx = int(round((0.5 - 0.05) / 0.05))  # ~9
-    thr_05_idx = min(thr_05_idx, len(thresholds) - 1)
+    cov_r_arr = np.stack(all_cov_r)
+    cov_p_arr = np.stack(all_cov_p)
+    mat_r_arr = np.array(all_mat_r)
+    
+    thr_05_idx = min(int(round((0.5 - 0.05) / 0.05)), len(thresholds) - 1)
+    
+    # Granular Grouping
+    mat_r_by_N = { "N<=6": [], "N=7": [], "N=8": [], "N>=9": [] }
+    mat_r_by_rot = { "rot=0": [], "rot=1": [], "rot>=2": [] }
+    
+    for i in range(len(all_mat_r)):
+        n = all_N[i]
+        if n <= 6: mat_r_by_N["N<=6"].append(all_mat_r[i])
+        elif n == 7: mat_r_by_N["N=7"].append(all_mat_r[i])
+        elif n == 8: mat_r_by_N["N=8"].append(all_mat_r[i])
+        else: mat_r_by_N["N>=9"].append(all_mat_r[i])
+        
+        r = all_rot[i]
+        if r == 0: mat_r_by_rot["rot=0"].append(all_mat_r[i])
+        elif r == 1: mat_r_by_rot["rot=1"].append(all_mat_r[i])
+        else: mat_r_by_rot["rot>=2"].append(all_mat_r[i])
 
     results = {
-        'n_evaluated':      len(all_mat_r),
-        'thresholds':       thresholds.tolist(),
-
-        # Standard 0.5 Å threshold metrics
-        'cov_r_05':    float(cov_r_arr[:, thr_05_idx].mean()),
-        'cov_r_05_med':float(np.median(cov_r_arr[:, thr_05_idx])),
-        'cov_p_05':    float(cov_p_arr[:, thr_05_idx].mean()),
-        'cov_p_05_med':float(np.median(cov_p_arr[:, thr_05_idx])),
-
-        # MAT scores
-        'mat_r_mean':  float(mat_r_arr.mean()),
-        'mat_r_med':   float(np.median(mat_r_arr)),
-        'mat_r_std':   float(mat_r_arr.std()),
-        'mat_p_mean':  float(mat_p_arr.mean()),
-        'mat_p_med':   float(np.median(mat_p_arr)),
-        'mat_p_std':   float(mat_p_arr.std()),
-
-        # Full arrays for detailed analysis
-        'cov_r_mean_by_thr': cov_r_arr.mean(0).tolist(),
-        'cov_p_mean_by_thr': cov_p_arr.mean(0).tolist(),
+        'n_evaluated': len(all_mat_r),
+        'cov_r_05': float(cov_r_arr[:, thr_05_idx].mean()),
+        'cov_p_05': float(cov_p_arr[:, thr_05_idx].mean()),
+        'mat_r_mean': float(mat_r_arr.mean()),
+        'mat_p_mean': float(np.mean(all_mat_p)),
+        'diversity_mean': float(np.mean(all_div)),
+        'mat_r_by_N': {k: float(np.mean(v)) if v else 0.0 for k,v in mat_r_by_N.items()},
+        'mat_r_by_rot': {k: float(np.mean(v)) if v else 0.0 for k,v in mat_r_by_rot.items()},
+        'count_by_rot': {k: len(v) for k,v in mat_r_by_rot.items()}
     }
     return results
 
@@ -261,15 +274,23 @@ def print_geodiff_results(results: dict, tag: str = ""):
     hdr = f"── GeoDiff COV-MAT Eval {tag} " + "─" * 40
     print(f"\n{hdr}")
     print(f"  n_evaluated : {results.get('n_evaluated', '?')}")
-    print(f"  COV-R@0.5Å  : {results.get('cov_r_05', float('nan'))*100:6.1f}%  "
-          f"(med: {results.get('cov_r_05_med', float('nan'))*100:.1f}%)")
-    print(f"  COV-P@0.5Å  : {results.get('cov_p_05', float('nan'))*100:6.1f}%  "
-          f"(med: {results.get('cov_p_05_med', float('nan'))*100:.1f}%)")
-    print(f"  MAT-R (mean): {results.get('mat_r_mean', float('nan')):.4f} Å  "
-          f"(med: {results.get('mat_r_med', float('nan')):.4f} Å)")
-    print(f"  MAT-P (mean): {results.get('mat_p_mean', float('nan')):.4f} Å  "
-          f"(med: {results.get('mat_p_med', float('nan')):.4f} Å)")
+    print(f"  COV-R@0.5Å  : {results.get('cov_r_05', float('nan'))*100:6.1f}%")
+    print(f"  COV-P@0.5Å  : {results.get('cov_p_05', float('nan'))*100:6.1f}%")
+    print(f"  MAT-R (mean): {results.get('mat_r_mean', float('nan')):.4f} Å")
+    print(f"  MAT-P (mean): {results.get('mat_p_mean', float('nan')):.4f} Å")
+    print(f"  Diversity   : {results.get('diversity_mean', float('nan')):.4f} Å (mean pairwise RMSD)")
     print()
+    if 'mat_r_by_N' in results:
+        print("  MAT-R by Molecule Size (Heavy Atoms):")
+        for k, v in results['mat_r_by_N'].items():
+            print(f"    {k:6s} : {v:.4f} Å")
+        print()
+    if 'mat_r_by_rot' in results:
+        print("  MAT-R by Rotatable Bonds:")
+        for k, v in results['mat_r_by_rot'].items():
+            count = results['count_by_rot'][k]
+            print(f"    {k:6s} : {v:.4f} Å (n={count})")
+        print()
     print("  SOTA Reference (QM9 heavy-atom):")
     print("    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å")
     print("    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å")

@@ -1,0 +1,45 @@
+Device: cuda
+
+Loading and splitting dataset: data/qm9_heavy.jsonl
+  Total: 131,967  |  Train: 118,771  |  Val: 13,196
+
+Loading checkpoint: checkpoints/exp_G_heavy_atom_sota_ddp_best_matr.pt
+  Epoch=500  |  Best QM9 MAT-R=0.1596059746819604
+  Parameters: 8.28M
+
+══════════════════════════════════════════════════════════════════════
+  PIPELINE INTEGRITY AUDIT
+══════════════════════════════════════════════════════════════════════
+
+── CHECK 1: Split Integrity (Train/Val Overlap) ─────────────────────────
+  Train mols : 118,771
+  Val   mols : 13,196
+  Overlap    : 8  (0.06%)
+  Result     : ❌ FAIL
+
+── CHECK 2: Generation Starts From Pure Gaussian Noise ──────────────────
+  Initial x_T (noise) vs reference RMSD: 1.0736 Å
+  (Expected: >> 0.5 Å for pure noise, ≈ 0.0 would mean leakage)
+  Result     : ✅ PASS
+
+── CHECK 3: RMSD Direction (gen↔ref, not ref↔ref) ───────────────────────
+  ref↔ref RMSD (bug):  0.000000 Å  (should be ~0.0)
+  gen↔ref RMSD (correct): 0.1695 Å  (should be > 0.05)
+  Result     : ✅ PASS
+
+── CHECK 4: Model Memorization Check ─────────────────────────────────────
+  gen↔val_ref RMSD  : 0.2221 Å
+  gen↔nearest_train : 0.6318 Å
+  Ratio (train/val) : 2.844  (< 0.3 would suggest memorization)
+  Result     : ✅ PASS
+
+══════════════════════════════════════════════════════════════════════
+  AUDIT SUMMARY
+══════════════════════════════════════════════════════════════════════
+  ❌ FAIL  Split Integrity (no train/val overlap)
+  ✅ PASS  Generation from Gaussian noise
+  ✅ PASS  RMSD direction (gen↔ref)
+  ✅ PASS  No memorization of train data
+
+  ❌ Audit failed. Fix issues above before trusting eval results.
+

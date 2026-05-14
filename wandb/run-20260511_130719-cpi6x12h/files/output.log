@@ -31,3 +31,678 @@ Epoch 016/500 | train=1.5384 (mse=0.8497 geo=1.3774) val=1.4937 | lr=5.00e-04
 Epoch 017/500 | train=1.5097 (mse=0.8317 geo=1.3561) val=1.4760 | lr=5.00e-04
 Epoch 018/500 | train=1.4894 (mse=0.8119 geo=1.3550) val=1.4761 | lr=5.00e-04
 Epoch 019/500 | train=1.4932 (mse=0.8143 geo=1.3578) val=1.4676 | lr=5.00e-04
+Epoch 020/500 | train=1.4656 (mse=0.7879 geo=1.3555) val=1.4469 | lr=5.00e-04
+Epoch 021/500 | train=1.4733 (mse=0.7940 geo=1.3587) val=1.4651 | lr=4.99e-04
+Epoch 022/500 | train=1.4538 (mse=0.7820 geo=1.3436) val=1.4333 | lr=4.99e-04
+Epoch 023/500 | train=1.4507 (mse=0.7739 geo=1.3536) val=1.4274 | lr=4.99e-04
+Epoch 024/500 | train=1.4375 (mse=0.7597 geo=1.3557) val=1.4137 | lr=4.99e-04
+Epoch 025/500 | train=1.4372 (mse=0.7620 geo=1.3503) val=1.3983 | lr=4.99e-04
+Epoch 026/500 | train=1.4238 (mse=0.7493 geo=1.3489) val=1.3861 | lr=4.99e-04
+Epoch 027/500 | train=1.4197 (mse=0.7491 geo=1.3411) val=1.3909 | lr=4.99e-04
+Epoch 028/500 | train=1.4050 (mse=0.7351 geo=1.3400) val=1.3949 | lr=4.99e-04
+Epoch 029/500 | train=1.4093 (mse=0.7370 geo=1.3446) val=1.3829 | lr=4.98e-04
+Epoch 030/500 | train=1.4018 (mse=0.7303 geo=1.3430) val=1.3839 | lr=4.98e-04
+Epoch 031/500 | train=1.3957 (mse=0.7226 geo=1.3461) val=1.3387 | lr=4.98e-04
+Epoch 032/500 | train=1.3918 (mse=0.7200 geo=1.3436) val=1.3608 | lr=4.98e-04
+Epoch 033/500 | train=1.3865 (mse=0.7142 geo=1.3446) val=1.3409 | lr=4.98e-04
+Epoch 034/500 | train=1.3773 (mse=0.7091 geo=1.3363) val=1.3613 | lr=4.97e-04
+Epoch 035/500 | train=1.3593 (mse=0.6967 geo=1.3251) val=1.3439 | lr=4.97e-04
+Epoch 036/500 | train=1.3719 (mse=0.7052 geo=1.3334) val=1.3571 | lr=4.97e-04
+Epoch 037/500 | train=1.3644 (mse=0.6974 geo=1.3339) val=1.3463 | lr=4.97e-04
+Epoch 038/500 | train=1.3622 (mse=0.6884 geo=1.3477) val=1.3206 | lr=4.96e-04
+Epoch 039/500 | train=1.3568 (mse=0.6860 geo=1.3416) val=1.3285 | lr=4.96e-04
+Epoch 040/500 | train=1.3493 (mse=0.6845 geo=1.3295) val=1.3095 | lr=4.96e-04
+Epoch 041/500 | train=1.3500 (mse=0.6817 geo=1.3366) val=1.3275 | lr=4.95e-04
+Epoch 042/500 | train=1.3455 (mse=0.6751 geo=1.3409) val=1.3397 | lr=4.95e-04
+Epoch 043/500 | train=1.3317 (mse=0.6652 geo=1.3330) val=1.3072 | lr=4.95e-04
+Epoch 044/500 | train=1.3376 (mse=0.6711 geo=1.3330) val=1.3129 | lr=4.94e-04
+Epoch 045/500 | train=1.3324 (mse=0.6656 geo=1.3334) val=1.3017 | lr=4.94e-04
+Epoch 046/500 | train=1.3326 (mse=0.6655 geo=1.3342) val=1.2813 | lr=4.94e-04
+Epoch 047/500 | train=1.3234 (mse=0.6597 geo=1.3275) val=1.3143 | lr=4.93e-04
+Epoch 048/500 | train=1.3205 (mse=0.6568 geo=1.3274) val=1.2926 | lr=4.93e-04
+Epoch 049/500 | train=1.3136 (mse=0.6513 geo=1.3246) val=1.2985 | lr=4.93e-04
+Epoch 050/500 | train=1.3152 (mse=0.6487 geo=1.3331) val=1.2853 | lr=4.92e-04
+
+[GeoDiff Eval @ Epoch 50] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 50] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   92.3%  (med: 100.0%)
+  MAT-R (mean): 0.1722 Å  (med: 0.1504 Å)
+  MAT-P (mean): 0.2436 Å  (med: 0.2671 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1722 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 051/500 | train=1.3137 (mse=0.6458 geo=1.3358) val=1.2973 | lr=4.92e-04
+Epoch 052/500 | train=1.3025 (mse=0.6381 geo=1.3287) val=1.2811 | lr=4.91e-04
+Epoch 053/500 | train=1.3110 (mse=0.6450 geo=1.3320) val=1.2944 | lr=4.91e-04
+Epoch 054/500 | train=1.2953 (mse=0.6325 geo=1.3255) val=1.3009 | lr=4.91e-04
+Epoch 055/500 | train=1.2956 (mse=0.6308 geo=1.3295) val=1.2817 | lr=4.90e-04
+Epoch 056/500 | train=1.3010 (mse=0.6394 geo=1.3231) val=1.2692 | lr=4.90e-04
+Epoch 057/500 | train=1.2988 (mse=0.6352 geo=1.3271) val=1.2707 | lr=4.89e-04
+Epoch 058/500 | train=1.2899 (mse=0.6310 geo=1.3178) val=1.2694 | lr=4.89e-04
+Epoch 059/500 | train=1.2868 (mse=0.6217 geo=1.3303) val=1.2702 | lr=4.88e-04
+Epoch 060/500 | train=1.2863 (mse=0.6226 geo=1.3273) val=1.2773 | lr=4.88e-04
+Epoch 061/500 | train=1.2830 (mse=0.6167 geo=1.3328) val=1.2587 | lr=4.87e-04
+Epoch 062/500 | train=1.2789 (mse=0.6138 geo=1.3301) val=1.2846 | lr=4.87e-04
+Epoch 063/500 | train=1.2769 (mse=0.6142 geo=1.3255) val=1.2500 | lr=4.86e-04
+Epoch 064/500 | train=1.2805 (mse=0.6154 geo=1.3302) val=1.2476 | lr=4.86e-04
+Epoch 065/500 | train=1.2733 (mse=0.6096 geo=1.3274) val=1.2470 | lr=4.85e-04
+Epoch 066/500 | train=1.2588 (mse=0.5999 geo=1.3177) val=1.2658 | lr=4.85e-04
+Epoch 067/500 | train=1.2630 (mse=0.6044 geo=1.3172) val=1.2376 | lr=4.84e-04
+Epoch 068/500 | train=1.2730 (mse=0.6057 geo=1.3345) val=1.2544 | lr=4.83e-04
+Epoch 069/500 | train=1.2630 (mse=0.6000 geo=1.3260) val=1.2391 | lr=4.83e-04
+Epoch 070/500 | train=1.2624 (mse=0.5975 geo=1.3299) val=1.2346 | lr=4.82e-04
+Epoch 071/500 | train=1.2580 (mse=0.5972 geo=1.3214) val=1.2422 | lr=4.82e-04
+Epoch 072/500 | train=1.2568 (mse=0.5962 geo=1.3211) val=1.2263 | lr=4.81e-04
+Epoch 073/500 | train=1.2572 (mse=0.5931 geo=1.3281) val=1.2653 | lr=4.81e-04
+Epoch 074/500 | train=1.2511 (mse=0.5915 geo=1.3192) val=1.2292 | lr=4.80e-04
+Epoch 075/500 | train=1.2594 (mse=0.5943 geo=1.3301) val=1.2414 | lr=4.79e-04
+Epoch 076/500 | train=1.2508 (mse=0.5852 geo=1.3312) val=1.2351 | lr=4.79e-04
+Epoch 077/500 | train=1.2526 (mse=0.5878 geo=1.3295) val=1.2435 | lr=4.78e-04
+Epoch 078/500 | train=1.2452 (mse=0.5799 geo=1.3307) val=1.2317 | lr=4.77e-04
+Epoch 079/500 | train=1.2383 (mse=0.5775 geo=1.3217) val=1.2311 | lr=4.77e-04
+Epoch 080/500 | train=1.2470 (mse=0.5811 geo=1.3319) val=1.2193 | lr=4.76e-04
+Epoch 081/500 | train=1.2320 (mse=0.5741 geo=1.3158) val=1.2136 | lr=4.75e-04
+Epoch 082/500 | train=1.2358 (mse=0.5780 geo=1.3154) val=1.2148 | lr=4.75e-04
+Epoch 083/500 | train=1.2440 (mse=0.5787 geo=1.3306) val=1.2087 | lr=4.74e-04
+Epoch 084/500 | train=1.2260 (mse=0.5673 geo=1.3172) val=1.2279 | lr=4.73e-04
+Epoch 085/500 | train=1.2383 (mse=0.5783 geo=1.3199) val=1.2191 | lr=4.72e-04
+Epoch 086/500 | train=1.2309 (mse=0.5696 geo=1.3226) val=1.2136 | lr=4.72e-04
+Epoch 087/500 | train=1.2315 (mse=0.5713 geo=1.3204) val=1.2262 | lr=4.71e-04
+Epoch 088/500 | train=1.2187 (mse=0.5620 geo=1.3134) val=1.2129 | lr=4.70e-04
+Epoch 089/500 | train=1.2304 (mse=0.5649 geo=1.3311) val=1.1972 | lr=4.69e-04
+Epoch 090/500 | train=1.2231 (mse=0.5678 geo=1.3106) val=1.1990 | lr=4.69e-04
+Epoch 091/500 | train=1.2245 (mse=0.5647 geo=1.3196) val=1.1985 | lr=4.68e-04
+Epoch 092/500 | train=1.2200 (mse=0.5626 geo=1.3148) val=1.1994 | lr=4.67e-04
+Epoch 093/500 | train=1.2264 (mse=0.5617 geo=1.3295) val=1.2085 | lr=4.66e-04
+Epoch 094/500 | train=1.2247 (mse=0.5643 geo=1.3209) val=1.2099 | lr=4.65e-04
+Epoch 095/500 | train=1.2162 (mse=0.5531 geo=1.3262) val=1.2083 | lr=4.65e-04
+Epoch 096/500 | train=1.2160 (mse=0.5516 geo=1.3287) val=1.1883 | lr=4.64e-04
+Epoch 097/500 | train=1.2149 (mse=0.5574 geo=1.3149) val=1.2130 | lr=4.63e-04
+Epoch 098/500 | train=1.2129 (mse=0.5506 geo=1.3245) val=1.2090 | lr=4.62e-04
+Epoch 099/500 | train=1.2144 (mse=0.5534 geo=1.3219) val=1.1731 | lr=4.61e-04
+Epoch 100/500 | train=1.2193 (mse=0.5577 geo=1.3233) val=1.1993 | lr=4.60e-04
+
+[GeoDiff Eval @ Epoch 100] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 100] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.3%  (med: 100.0%)
+  MAT-R (mean): 0.1639 Å  (med: 0.1434 Å)
+  MAT-P (mean): 0.2355 Å  (med: 0.2630 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1639 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 101/500 | train=1.2092 (mse=0.5472 geo=1.3240) val=1.1866 | lr=4.60e-04
+Epoch 102/500 | train=1.2070 (mse=0.5473 geo=1.3194) val=1.1960 | lr=4.59e-04
+Epoch 103/500 | train=1.2035 (mse=0.5472 geo=1.3126) val=1.1909 | lr=4.58e-04
+Epoch 104/500 | train=1.2093 (mse=0.5466 geo=1.3253) val=1.2030 | lr=4.57e-04
+Epoch 105/500 | train=1.2097 (mse=0.5452 geo=1.3289) val=1.1853 | lr=4.56e-04
+Epoch 106/500 | train=1.2088 (mse=0.5452 geo=1.3273) val=1.1953 | lr=4.55e-04
+Epoch 107/500 | train=1.2030 (mse=0.5461 geo=1.3139) val=1.1744 | lr=4.54e-04
+Epoch 108/500 | train=1.2022 (mse=0.5437 geo=1.3170) val=1.1824 | lr=4.53e-04
+Epoch 109/500 | train=1.1955 (mse=0.5384 geo=1.3141) val=1.1877 | lr=4.52e-04
+Epoch 110/500 | train=1.1970 (mse=0.5339 geo=1.3261) val=1.1538 | lr=4.51e-04
+Epoch 111/500 | train=1.1970 (mse=0.5383 geo=1.3174) val=1.1835 | lr=4.50e-04
+Epoch 112/500 | train=1.1908 (mse=0.5309 geo=1.3199) val=1.1787 | lr=4.49e-04
+Epoch 113/500 | train=1.1953 (mse=0.5397 geo=1.3112) val=1.1766 | lr=4.48e-04
+Epoch 114/500 | train=1.1944 (mse=0.5335 geo=1.3218) val=1.1663 | lr=4.47e-04
+Epoch 115/500 | train=1.1841 (mse=0.5320 geo=1.3041) val=1.1714 | lr=4.46e-04
+Epoch 116/500 | train=1.1807 (mse=0.5252 geo=1.3109) val=1.1982 | lr=4.45e-04
+Epoch 117/500 | train=1.1806 (mse=0.5251 geo=1.3110) val=1.1740 | lr=4.44e-04
+Epoch 118/500 | train=1.1861 (mse=0.5271 geo=1.3180) val=1.1707 | lr=4.43e-04
+Epoch 119/500 | train=1.1846 (mse=0.5262 geo=1.3168) val=1.1746 | lr=4.42e-04
+Epoch 120/500 | train=1.1877 (mse=0.5278 geo=1.3199) val=1.1738 | lr=4.41e-04
+Epoch 121/500 | train=1.1842 (mse=0.5266 geo=1.3152) val=1.1679 | lr=4.40e-04
+Epoch 122/500 | train=1.1825 (mse=0.5235 geo=1.3179) val=1.1786 | lr=4.39e-04
+Epoch 123/500 | train=1.1848 (mse=0.5261 geo=1.3173) val=1.1872 | lr=4.38e-04
+Epoch 124/500 | train=1.1789 (mse=0.5197 geo=1.3185) val=1.1578 | lr=4.37e-04
+Epoch 125/500 | train=1.1756 (mse=0.5217 geo=1.3078) val=1.1671 | lr=4.36e-04
+Epoch 126/500 | train=1.1734 (mse=0.5172 geo=1.3125) val=1.1679 | lr=4.35e-04
+Epoch 127/500 | train=1.1810 (mse=0.5214 geo=1.3191) val=1.1774 | lr=4.34e-04
+Epoch 128/500 | train=1.1706 (mse=0.5131 geo=1.3151) val=1.1613 | lr=4.33e-04
+Epoch 129/500 | train=1.1749 (mse=0.5159 geo=1.3181) val=1.1619 | lr=4.32e-04
+Epoch 130/500 | train=1.1786 (mse=0.5206 geo=1.3160) val=1.1501 | lr=4.31e-04
+Epoch 131/500 | train=1.1684 (mse=0.5088 geo=1.3192) val=1.1621 | lr=4.30e-04
+Epoch 132/500 | train=1.1667 (mse=0.5120 geo=1.3093) val=1.1567 | lr=4.28e-04
+Epoch 133/500 | train=1.1738 (mse=0.5169 geo=1.3139) val=1.1649 | lr=4.27e-04
+Epoch 134/500 | train=1.1643 (mse=0.5073 geo=1.3139) val=1.1542 | lr=4.26e-04
+Epoch 135/500 | train=1.1714 (mse=0.5113 geo=1.3203) val=1.1648 | lr=4.25e-04
+Epoch 136/500 | train=1.1684 (mse=0.5098 geo=1.3172) val=1.1677 | lr=4.24e-04
+Epoch 137/500 | train=1.1619 (mse=0.5063 geo=1.3111) val=1.1521 | lr=4.23e-04
+Epoch 138/500 | train=1.1634 (mse=0.5118 geo=1.3031) val=1.1505 | lr=4.22e-04
+Epoch 139/500 | train=1.1628 (mse=0.5099 geo=1.3058) val=1.1767 | lr=4.20e-04
+Epoch 140/500 | train=1.1613 (mse=0.5050 geo=1.3125) val=1.1561 | lr=4.19e-04
+Epoch 141/500 | train=1.1581 (mse=0.5021 geo=1.3120) val=1.1440 | lr=4.18e-04
+Epoch 142/500 | train=1.1578 (mse=0.5042 geo=1.3073) val=1.1532 | lr=4.17e-04
+Epoch 143/500 | train=1.1634 (mse=0.5095 geo=1.3079) val=1.1598 | lr=4.16e-04
+Epoch 144/500 | train=1.1588 (mse=0.4986 geo=1.3204) val=1.1468 | lr=4.14e-04
+Epoch 145/500 | train=1.1559 (mse=0.5007 geo=1.3103) val=1.1449 | lr=4.13e-04
+Epoch 146/500 | train=1.1599 (mse=0.5038 geo=1.3123) val=1.1375 | lr=4.12e-04
+Epoch 147/500 | train=1.1617 (mse=0.5023 geo=1.3188) val=1.1669 | lr=4.11e-04
+Epoch 148/500 | train=1.1517 (mse=0.5014 geo=1.3006) val=1.1483 | lr=4.10e-04
+Epoch 149/500 | train=1.1584 (mse=0.5021 geo=1.3126) val=1.1344 | lr=4.08e-04
+Epoch 150/500 | train=1.1538 (mse=0.4953 geo=1.3169) val=1.1490 | lr=4.07e-04
+
+[GeoDiff Eval @ Epoch 150] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 150] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.0%  (med: 100.0%)
+  MAT-R (mean): 0.1696 Å  (med: 0.1427 Å)
+  MAT-P (mean): 0.2359 Å  (med: 0.2695 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 151/500 | train=1.1495 (mse=0.4965 geo=1.3059) val=1.1461 | lr=4.06e-04
+Epoch 152/500 | train=1.1483 (mse=0.4915 geo=1.3134) val=1.1413 | lr=4.05e-04
+Epoch 153/500 | train=1.1548 (mse=0.4959 geo=1.3179) val=1.1242 | lr=4.03e-04
+Epoch 154/500 | train=1.1481 (mse=0.4926 geo=1.3110) val=1.1434 | lr=4.02e-04
+Epoch 155/500 | train=1.1483 (mse=0.4899 geo=1.3169) val=1.1601 | lr=4.01e-04
+Epoch 156/500 | train=1.1520 (mse=0.4984 geo=1.3071) val=1.1453 | lr=4.00e-04
+Epoch 157/500 | train=1.1518 (mse=0.4978 geo=1.3078) val=1.1301 | lr=3.98e-04
+Epoch 158/500 | train=1.1408 (mse=0.4880 geo=1.3056) val=1.1426 | lr=3.97e-04
+Epoch 159/500 | train=1.1422 (mse=0.4837 geo=1.3170) val=1.1331 | lr=3.96e-04
+Epoch 160/500 | train=1.1360 (mse=0.4831 geo=1.3058) val=1.1361 | lr=3.94e-04
+Epoch 161/500 | train=1.1409 (mse=0.4824 geo=1.3170) val=1.1392 | lr=3.93e-04
+Epoch 162/500 | train=1.1370 (mse=0.4833 geo=1.3075) val=1.1326 | lr=3.92e-04
+Epoch 163/500 | train=1.1424 (mse=0.4851 geo=1.3145) val=1.1368 | lr=3.90e-04
+Epoch 164/500 | train=1.1467 (mse=0.4915 geo=1.3105) val=1.1493 | lr=3.89e-04
+Epoch 165/500 | train=1.1301 (mse=0.4790 geo=1.3024) val=1.1361 | lr=3.88e-04
+Epoch 166/500 | train=1.1302 (mse=0.4787 geo=1.3029) val=1.1271 | lr=3.86e-04
+Epoch 167/500 | train=1.1353 (mse=0.4788 geo=1.3131) val=1.1294 | lr=3.85e-04
+Epoch 168/500 | train=1.1396 (mse=0.4815 geo=1.3161) val=1.1301 | lr=3.84e-04
+Epoch 169/500 | train=1.1345 (mse=0.4780 geo=1.3131) val=1.1383 | lr=3.82e-04
+Epoch 170/500 | train=1.1381 (mse=0.4799 geo=1.3164) val=1.1445 | lr=3.81e-04
+Epoch 171/500 | train=1.1362 (mse=0.4806 geo=1.3114) val=1.1445 | lr=3.80e-04
+Epoch 172/500 | train=1.1245 (mse=0.4754 geo=1.2982) val=1.1329 | lr=3.78e-04
+Epoch 173/500 | train=1.1314 (mse=0.4797 geo=1.3034) val=1.1345 | lr=3.77e-04
+Epoch 174/500 | train=1.1281 (mse=0.4756 geo=1.3051) val=1.1337 | lr=3.75e-04
+Epoch 175/500 | train=1.1291 (mse=0.4759 geo=1.3064) val=1.1378 | lr=3.74e-04
+Epoch 176/500 | train=1.1291 (mse=0.4795 geo=1.2992) val=1.1147 | lr=3.73e-04
+Epoch 177/500 | train=1.1337 (mse=0.4757 geo=1.3159) val=1.1337 | lr=3.71e-04
+Epoch 178/500 | train=1.1242 (mse=0.4705 geo=1.3075) val=1.1337 | lr=3.70e-04
+Epoch 179/500 | train=1.1229 (mse=0.4712 geo=1.3035) val=1.1145 | lr=3.68e-04
+Epoch 180/500 | train=1.1234 (mse=0.4690 geo=1.3088) val=1.1280 | lr=3.67e-04
+Epoch 181/500 | train=1.1158 (mse=0.4658 geo=1.3000) val=1.1123 | lr=3.66e-04
+Epoch 182/500 | train=1.1219 (mse=0.4695 geo=1.3048) val=1.1046 | lr=3.64e-04
+Epoch 183/500 | train=1.1247 (mse=0.4695 geo=1.3104) val=1.1320 | lr=3.63e-04
+Epoch 184/500 | train=1.1195 (mse=0.4645 geo=1.3101) val=1.1358 | lr=3.61e-04
+Epoch 185/500 | train=1.1216 (mse=0.4658 geo=1.3116) val=1.1249 | lr=3.60e-04
+Epoch 186/500 | train=1.1254 (mse=0.4722 geo=1.3065) val=1.1266 | lr=3.58e-04
+Epoch 187/500 | train=1.1150 (mse=0.4612 geo=1.3077) val=1.1216 | lr=3.57e-04
+Epoch 188/500 | train=1.1220 (mse=0.4653 geo=1.3134) val=1.1259 | lr=3.56e-04
+Epoch 189/500 | train=1.1126 (mse=0.4607 geo=1.3038) val=1.1293 | lr=3.54e-04
+Epoch 190/500 | train=1.1132 (mse=0.4637 geo=1.2990) val=1.1291 | lr=3.53e-04
+Epoch 191/500 | train=1.1216 (mse=0.4668 geo=1.3096) val=1.1177 | lr=3.51e-04
+Epoch 192/500 | train=1.1155 (mse=0.4621 geo=1.3068) val=1.1216 | lr=3.50e-04
+Epoch 193/500 | train=1.1170 (mse=0.4651 geo=1.3038) val=1.1253 | lr=3.48e-04
+Epoch 194/500 | train=1.1079 (mse=0.4561 geo=1.3037) val=1.1117 | lr=3.47e-04
+Epoch 195/500 | train=1.1173 (mse=0.4594 geo=1.3159) val=1.1134 | lr=3.45e-04
+Epoch 196/500 | train=1.1109 (mse=0.4584 geo=1.3049) val=1.0958 | lr=3.44e-04
+Epoch 197/500 | train=1.1110 (mse=0.4576 geo=1.3068) val=1.1172 | lr=3.42e-04
+Epoch 198/500 | train=1.1128 (mse=0.4599 geo=1.3059) val=1.1083 | lr=3.41e-04
+Epoch 199/500 | train=1.1150 (mse=0.4605 geo=1.3091) val=1.1074 | lr=3.39e-04
+Epoch 200/500 | train=1.1111 (mse=0.4585 geo=1.3053) val=1.1266 | lr=3.38e-04
+
+[GeoDiff Eval @ Epoch 200] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 200] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.3%  (med: 100.0%)
+  MAT-R (mean): 0.1644 Å  (med: 0.1292 Å)
+  MAT-P (mean): 0.2304 Å  (med: 0.2574 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 201/500 | train=1.1138 (mse=0.4556 geo=1.3164) val=1.0904 | lr=3.36e-04
+Epoch 202/500 | train=1.1105 (mse=0.4562 geo=1.3086) val=1.1287 | lr=3.35e-04
+Epoch 203/500 | train=1.1061 (mse=0.4560 geo=1.3001) val=1.1075 | lr=3.33e-04
+Epoch 204/500 | train=1.1100 (mse=0.4587 geo=1.3026) val=1.1227 | lr=3.32e-04
+Epoch 205/500 | train=1.1109 (mse=0.4566 geo=1.3085) val=1.1089 | lr=3.30e-04
+Epoch 206/500 | train=1.1080 (mse=0.4516 geo=1.3128) val=1.1167 | lr=3.29e-04
+Epoch 207/500 | train=1.0969 (mse=0.4474 geo=1.2990) val=1.1037 | lr=3.27e-04
+Epoch 208/500 | train=1.1013 (mse=0.4488 geo=1.3052) val=1.1129 | lr=3.26e-04
+Epoch 209/500 | train=1.1082 (mse=0.4522 geo=1.3121) val=1.1433 | lr=3.24e-04
+Epoch 210/500 | train=1.1010 (mse=0.4505 geo=1.3010) val=1.1336 | lr=3.23e-04
+Epoch 211/500 | train=1.0964 (mse=0.4478 geo=1.2973) val=1.1267 | lr=3.21e-04
+Epoch 212/500 | train=1.1107 (mse=0.4553 geo=1.3108) val=1.1156 | lr=3.20e-04
+Epoch 213/500 | train=1.1011 (mse=0.4501 geo=1.3022) val=1.1138 | lr=3.18e-04
+Epoch 214/500 | train=1.1005 (mse=0.4469 geo=1.3071) val=1.1071 | lr=3.17e-04
+Epoch 215/500 | train=1.1018 (mse=0.4515 geo=1.3006) val=1.1150 | lr=3.15e-04
+Epoch 216/500 | train=1.0973 (mse=0.4457 geo=1.3033) val=1.1145 | lr=3.13e-04
+Epoch 217/500 | train=1.0956 (mse=0.4432 geo=1.3047) val=1.1051 | lr=3.12e-04
+Epoch 218/500 | train=1.1063 (mse=0.4507 geo=1.3111) val=1.1081 | lr=3.10e-04
+Epoch 219/500 | train=1.1013 (mse=0.4460 geo=1.3107) val=1.1079 | lr=3.09e-04
+Epoch 220/500 | train=1.0902 (mse=0.4431 geo=1.2941) val=1.0982 | lr=3.07e-04
+Epoch 221/500 | train=1.0979 (mse=0.4457 geo=1.3043) val=1.1095 | lr=3.06e-04
+Epoch 222/500 | train=1.0941 (mse=0.4416 geo=1.3049) val=1.0995 | lr=3.04e-04
+Epoch 223/500 | train=1.0864 (mse=0.4338 geo=1.3052) val=1.1100 | lr=3.03e-04
+Epoch 224/500 | train=1.0966 (mse=0.4422 geo=1.3089) val=1.0940 | lr=3.01e-04
+Epoch 225/500 | train=1.0962 (mse=0.4409 geo=1.3107) val=1.0828 | lr=2.99e-04
+Epoch 226/500 | train=1.0950 (mse=0.4390 geo=1.3121) val=1.1034 | lr=2.98e-04
+Epoch 227/500 | train=1.0865 (mse=0.4357 geo=1.3016) val=1.1006 | lr=2.96e-04
+Epoch 228/500 | train=1.0845 (mse=0.4385 geo=1.2920) val=1.0962 | lr=2.95e-04
+Epoch 229/500 | train=1.0921 (mse=0.4387 geo=1.3068) val=1.0926 | lr=2.93e-04
+Epoch 230/500 | train=1.0948 (mse=0.4385 geo=1.3126) val=1.0922 | lr=2.91e-04
+Epoch 231/500 | train=1.0827 (mse=0.4323 geo=1.3006) val=1.1188 | lr=2.90e-04
+Epoch 232/500 | train=1.0882 (mse=0.4370 geo=1.3022) val=1.1038 | lr=2.88e-04
+Epoch 233/500 | train=1.0818 (mse=0.4340 geo=1.2956) val=1.0913 | lr=2.87e-04
+Epoch 234/500 | train=1.0978 (mse=0.4417 geo=1.3123) val=1.0916 | lr=2.85e-04
+Epoch 235/500 | train=1.0842 (mse=0.4318 geo=1.3049) val=1.1020 | lr=2.84e-04
+Epoch 236/500 | train=1.0946 (mse=0.4390 geo=1.3113) val=1.1208 | lr=2.82e-04
+Epoch 237/500 | train=1.0897 (mse=0.4346 geo=1.3101) val=1.0902 | lr=2.80e-04
+Epoch 238/500 | train=1.0860 (mse=0.4364 geo=1.2992) val=1.0889 | lr=2.79e-04
+Epoch 239/500 | train=1.0856 (mse=0.4329 geo=1.3054) val=1.1021 | lr=2.77e-04
+Epoch 240/500 | train=1.0850 (mse=0.4314 geo=1.3074) val=1.1193 | lr=2.76e-04
+Epoch 241/500 | train=1.0810 (mse=0.4329 geo=1.2963) val=1.1064 | lr=2.74e-04
+Epoch 242/500 | train=1.0783 (mse=0.4315 geo=1.2937) val=1.1175 | lr=2.72e-04
+Epoch 243/500 | train=1.0887 (mse=0.4343 geo=1.3087) val=1.0937 | lr=2.71e-04
+Epoch 244/500 | train=1.0796 (mse=0.4289 geo=1.3013) val=1.0809 | lr=2.69e-04
+Epoch 245/500 | train=1.0790 (mse=0.4307 geo=1.2967) val=1.1028 | lr=2.68e-04
+Epoch 246/500 | train=1.0785 (mse=0.4293 geo=1.2985) val=1.1129 | lr=2.66e-04
+Epoch 247/500 | train=1.0856 (mse=0.4319 geo=1.3075) val=1.0991 | lr=2.64e-04
+Epoch 248/500 | train=1.0809 (mse=0.4273 geo=1.3072) val=1.0845 | lr=2.63e-04
+Epoch 249/500 | train=1.0746 (mse=0.4265 geo=1.2962) val=1.0971 | lr=2.61e-04
+Epoch 250/500 | train=1.0852 (mse=0.4281 geo=1.3143) val=1.1053 | lr=2.60e-04
+
+[GeoDiff Eval @ Epoch 250] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 250] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.4%  (med: 100.0%)
+  MAT-R (mean): 0.1636 Å  (med: 0.1303 Å)
+  MAT-P (mean): 0.2311 Å  (med: 0.2578 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1636 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 251/500 | train=1.0818 (mse=0.4295 geo=1.3046) val=1.0958 | lr=2.58e-04
+Epoch 252/500 | train=1.0680 (mse=0.4191 geo=1.2978) val=1.0846 | lr=2.56e-04
+Epoch 253/500 | train=1.0747 (mse=0.4221 geo=1.3053) val=1.0981 | lr=2.55e-04
+Epoch 254/500 | train=1.0792 (mse=0.4264 geo=1.3057) val=1.1243 | lr=2.53e-04
+Epoch 255/500 | train=1.0733 (mse=0.4219 geo=1.3029) val=1.1089 | lr=2.52e-04
+Epoch 256/500 | train=1.0800 (mse=0.4251 geo=1.3097) val=1.1056 | lr=2.50e-04
+Epoch 257/500 | train=1.0691 (mse=0.4198 geo=1.2986) val=1.0772 | lr=2.48e-04
+Epoch 258/500 | train=1.0708 (mse=0.4197 geo=1.3022) val=1.0766 | lr=2.47e-04
+Epoch 259/500 | train=1.0714 (mse=0.4174 geo=1.3081) val=1.1075 | lr=2.45e-04
+Epoch 260/500 | train=1.0747 (mse=0.4227 geo=1.3039) val=1.0962 | lr=2.44e-04
+Epoch 261/500 | train=1.0697 (mse=0.4200 geo=1.2992) val=1.0959 | lr=2.42e-04
+Epoch 262/500 | train=1.0737 (mse=0.4178 geo=1.3119) val=1.0867 | lr=2.40e-04
+Epoch 263/500 | train=1.0677 (mse=0.4152 geo=1.3050) val=1.0824 | lr=2.39e-04
+Epoch 264/500 | train=1.0730 (mse=0.4186 geo=1.3088) val=1.1011 | lr=2.37e-04
+Epoch 265/500 | train=1.0688 (mse=0.4117 geo=1.3142) val=1.1046 | lr=2.36e-04
+Epoch 266/500 | train=1.0692 (mse=0.4192 geo=1.3001) val=1.0845 | lr=2.34e-04
+Epoch 267/500 | train=1.0682 (mse=0.4156 geo=1.3051) val=1.1174 | lr=2.32e-04
+Epoch 268/500 | train=1.0622 (mse=0.4145 geo=1.2954) val=1.1060 | lr=2.31e-04
+Epoch 269/500 | train=1.0664 (mse=0.4156 geo=1.3014) val=1.0881 | lr=2.29e-04
+Epoch 270/500 | train=1.0635 (mse=0.4147 geo=1.2977) val=1.0799 | lr=2.28e-04
+Epoch 271/500 | train=1.0681 (mse=0.4144 geo=1.3074) val=1.1016 | lr=2.26e-04
+Epoch 272/500 | train=1.0657 (mse=0.4112 geo=1.3089) val=1.0802 | lr=2.24e-04
+Epoch 273/500 | train=1.0649 (mse=0.4120 geo=1.3059) val=1.0992 | lr=2.23e-04
+Epoch 274/500 | train=1.0594 (mse=0.4112 geo=1.2964) val=1.0863 | lr=2.21e-04
+Epoch 275/500 | train=1.0599 (mse=0.4131 geo=1.2936) val=1.0867 | lr=2.20e-04
+Epoch 276/500 | train=1.0673 (mse=0.4143 geo=1.3059) val=1.0818 | lr=2.18e-04
+Epoch 277/500 | train=1.0606 (mse=0.4119 geo=1.2975) val=1.1049 | lr=2.16e-04
+Epoch 278/500 | train=1.0607 (mse=0.4092 geo=1.3030) val=1.0773 | lr=2.15e-04
+Epoch 279/500 | train=1.0510 (mse=0.4038 geo=1.2945) val=1.1036 | lr=2.13e-04
+Epoch 280/500 | train=1.0553 (mse=0.4079 geo=1.2948) val=1.0912 | lr=2.12e-04
+Epoch 281/500 | train=1.0501 (mse=0.4060 geo=1.2882) val=1.1000 | lr=2.10e-04
+Epoch 282/500 | train=1.0576 (mse=0.4072 geo=1.3007) val=1.0900 | lr=2.09e-04
+Epoch 283/500 | train=1.0631 (mse=0.4093 geo=1.3076) val=1.0802 | lr=2.07e-04
+Epoch 284/500 | train=1.0508 (mse=0.4030 geo=1.2957) val=1.0878 | lr=2.05e-04
+Epoch 285/500 | train=1.0551 (mse=0.4054 geo=1.2996) val=1.0914 | lr=2.04e-04
+Epoch 286/500 | train=1.0600 (mse=0.4086 geo=1.3028) val=1.0890 | lr=2.02e-04
+Epoch 287/500 | train=1.0498 (mse=0.4051 geo=1.2894) val=1.0876 | lr=2.01e-04
+Epoch 288/500 | train=1.0605 (mse=0.4080 geo=1.3050) val=1.0792 | lr=1.99e-04
+Epoch 289/500 | train=1.0521 (mse=0.4025 geo=1.2993) val=1.0834 | lr=1.97e-04
+Epoch 290/500 | train=1.0483 (mse=0.4008 geo=1.2949) val=1.0774 | lr=1.96e-04
+Epoch 291/500 | train=1.0493 (mse=0.4006 geo=1.2974) val=1.0727 | lr=1.94e-04
+Epoch 292/500 | train=1.0520 (mse=0.3983 geo=1.3073) val=1.0885 | lr=1.93e-04
+Epoch 293/500 | train=1.0479 (mse=0.3980 geo=1.2997) val=1.0850 | lr=1.91e-04
+Epoch 294/500 | train=1.0523 (mse=0.4025 geo=1.2997) val=1.0791 | lr=1.90e-04
+Epoch 295/500 | train=1.0535 (mse=0.3950 geo=1.3171) val=1.0850 | lr=1.88e-04
+Epoch 296/500 | train=1.0612 (mse=0.4005 geo=1.3214) val=1.0911 | lr=1.87e-04
+Epoch 297/500 | train=1.0522 (mse=0.3998 geo=1.3048) val=1.0722 | lr=1.85e-04
+Epoch 298/500 | train=1.0448 (mse=0.3961 geo=1.2975) val=1.0818 | lr=1.83e-04
+Epoch 299/500 | train=1.0480 (mse=0.3999 geo=1.2964) val=1.0770 | lr=1.82e-04
+Epoch 300/500 | train=1.0454 (mse=0.3967 geo=1.2975) val=1.0927 | lr=1.80e-04
+
+[GeoDiff Eval @ Epoch 300] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 300] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.3%  (med: 100.0%)
+  MAT-R (mean): 0.1643 Å  (med: 0.1316 Å)
+  MAT-P (mean): 0.2291 Å  (med: 0.2534 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 301/500 | train=1.0399 (mse=0.3940 geo=1.2918) val=1.0762 | lr=1.79e-04
+Epoch 302/500 | train=1.0379 (mse=0.3901 geo=1.2956) val=1.0916 | lr=1.77e-04
+Epoch 303/500 | train=1.0437 (mse=0.3962 geo=1.2950) val=1.0803 | lr=1.76e-04
+Epoch 304/500 | train=1.0462 (mse=0.3931 geo=1.3063) val=1.0817 | lr=1.74e-04
+Epoch 305/500 | train=1.0393 (mse=0.3949 geo=1.2888) val=1.0835 | lr=1.73e-04
+Epoch 306/500 | train=1.0368 (mse=0.3906 geo=1.2924) val=1.0743 | lr=1.71e-04
+Epoch 307/500 | train=1.0436 (mse=0.3929 geo=1.3015) val=1.0927 | lr=1.70e-04
+Epoch 308/500 | train=1.0460 (mse=0.3937 geo=1.3045) val=1.0857 | lr=1.68e-04
+Epoch 309/500 | train=1.0411 (mse=0.3932 geo=1.2957) val=1.0886 | lr=1.67e-04
+Epoch 310/500 | train=1.0405 (mse=0.3912 geo=1.2988) val=1.0920 | lr=1.65e-04
+Epoch 311/500 | train=1.0442 (mse=0.3923 geo=1.3039) val=1.0844 | lr=1.64e-04
+Epoch 312/500 | train=1.0363 (mse=0.3893 geo=1.2940) val=1.0833 | lr=1.62e-04
+Epoch 313/500 | train=1.0403 (mse=0.3910 geo=1.2987) val=1.0718 | lr=1.61e-04
+Epoch 314/500 | train=1.0398 (mse=0.3888 geo=1.3020) val=1.0887 | lr=1.59e-04
+Epoch 315/500 | train=1.0407 (mse=0.3896 geo=1.3022) val=1.0940 | lr=1.58e-04
+Epoch 316/500 | train=1.0348 (mse=0.3877 geo=1.2942) val=1.0915 | lr=1.56e-04
+Epoch 317/500 | train=1.0446 (mse=0.3909 geo=1.3074) val=1.0844 | lr=1.55e-04
+Epoch 318/500 | train=1.0389 (mse=0.3837 geo=1.3104) val=1.0766 | lr=1.53e-04
+Epoch 319/500 | train=1.0402 (mse=0.3893 geo=1.3019) val=1.0744 | lr=1.52e-04
+Epoch 320/500 | train=1.0420 (mse=0.3868 geo=1.3105) val=1.0865 | lr=1.50e-04
+Epoch 321/500 | train=1.0371 (mse=0.3881 geo=1.2979) val=1.0872 | lr=1.49e-04
+Epoch 322/500 | train=1.0358 (mse=0.3890 geo=1.2936) val=1.0856 | lr=1.47e-04
+Epoch 323/500 | train=1.0380 (mse=0.3838 geo=1.3084) val=1.0797 | lr=1.46e-04
+Epoch 324/500 | train=1.0319 (mse=0.3810 geo=1.3020) val=1.0931 | lr=1.44e-04
+Epoch 325/500 | train=1.0326 (mse=0.3797 geo=1.3057) val=1.0864 | lr=1.43e-04
+Epoch 326/500 | train=1.0308 (mse=0.3825 geo=1.2966) val=1.0942 | lr=1.42e-04
+Epoch 327/500 | train=1.0287 (mse=0.3796 geo=1.2983) val=1.0829 | lr=1.40e-04
+Epoch 328/500 | train=1.0296 (mse=0.3830 geo=1.2932) val=1.0790 | lr=1.39e-04
+Epoch 329/500 | train=1.0333 (mse=0.3808 geo=1.3050) val=1.0880 | lr=1.37e-04
+Epoch 330/500 | train=1.0328 (mse=0.3795 geo=1.3065) val=1.0911 | lr=1.36e-04
+Epoch 331/500 | train=1.0387 (mse=0.3860 geo=1.3054) val=1.0689 | lr=1.34e-04
+Epoch 332/500 | train=1.0265 (mse=0.3781 geo=1.2967) val=1.0749 | lr=1.33e-04
+Epoch 333/500 | train=1.0299 (mse=0.3850 geo=1.2897) val=1.0843 | lr=1.32e-04
+Epoch 334/500 | train=1.0267 (mse=0.3787 geo=1.2959) val=1.0721 | lr=1.30e-04
+Epoch 335/500 | train=1.0302 (mse=0.3787 geo=1.3031) val=1.0665 | lr=1.29e-04
+Epoch 336/500 | train=1.0238 (mse=0.3778 geo=1.2920) val=1.0787 | lr=1.27e-04
+Epoch 337/500 | train=1.0298 (mse=0.3757 geo=1.3083) val=1.0740 | lr=1.26e-04
+Epoch 338/500 | train=1.0218 (mse=0.3746 geo=1.2943) val=1.0765 | lr=1.25e-04
+Epoch 339/500 | train=1.0244 (mse=0.3770 geo=1.2948) val=1.0764 | lr=1.23e-04
+Epoch 340/500 | train=1.0257 (mse=0.3802 geo=1.2911) val=1.0804 | lr=1.22e-04
+Epoch 341/500 | train=1.0269 (mse=0.3795 geo=1.2948) val=1.0960 | lr=1.20e-04
+Epoch 342/500 | train=1.0237 (mse=0.3773 geo=1.2927) val=1.0662 | lr=1.19e-04
+Epoch 343/500 | train=1.0260 (mse=0.3750 geo=1.3020) val=1.0736 | lr=1.18e-04
+Epoch 344/500 | train=1.0211 (mse=0.3694 geo=1.3034) val=1.0787 | lr=1.16e-04
+Epoch 345/500 | train=1.0138 (mse=0.3704 geo=1.2867) val=1.0777 | lr=1.15e-04
+Epoch 346/500 | train=1.0241 (mse=0.3719 geo=1.3043) val=1.0929 | lr=1.14e-04
+Epoch 347/500 | train=1.0290 (mse=0.3809 geo=1.2961) val=1.0890 | lr=1.12e-04
+Epoch 348/500 | train=1.0267 (mse=0.3756 geo=1.3023) val=1.0627 | lr=1.11e-04
+Epoch 349/500 | train=1.0161 (mse=0.3704 geo=1.2915) val=1.0790 | lr=1.10e-04
+Epoch 350/500 | train=1.0123 (mse=0.3715 geo=1.2816) val=1.0851 | lr=1.08e-04
+
+[GeoDiff Eval @ Epoch 350] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 350] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.2%  (med: 100.0%)
+  MAT-R (mean): 0.1630 Å  (med: 0.1267 Å)
+  MAT-P (mean): 0.2281 Å  (med: 0.2526 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1630 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 351/500 | train=1.0210 (mse=0.3727 geo=1.2966) val=1.1047 | lr=1.07e-04
+Epoch 352/500 | train=1.0177 (mse=0.3697 geo=1.2959) val=1.0952 | lr=1.06e-04
+Epoch 353/500 | train=1.0185 (mse=0.3686 geo=1.2997) val=1.0639 | lr=1.04e-04
+Epoch 354/500 | train=1.0147 (mse=0.3656 geo=1.2981) val=1.0854 | lr=1.03e-04
+Epoch 355/500 | train=1.0205 (mse=0.3719 geo=1.2972) val=1.0736 | lr=1.02e-04
+Epoch 356/500 | train=1.0218 (mse=0.3707 geo=1.3022) val=1.0856 | lr=1.00e-04
+Epoch 357/500 | train=1.0186 (mse=0.3645 geo=1.3082) val=1.0769 | lr=9.92e-05
+Epoch 358/500 | train=1.0171 (mse=0.3710 geo=1.2922) val=1.0841 | lr=9.79e-05
+Epoch 359/500 | train=1.0160 (mse=0.3677 geo=1.2966) val=1.0920 | lr=9.66e-05
+Epoch 360/500 | train=1.0159 (mse=0.3660 geo=1.2999) val=1.0801 | lr=9.54e-05
+Epoch 361/500 | train=1.0189 (mse=0.3703 geo=1.2972) val=1.0774 | lr=9.41e-05
+Epoch 362/500 | train=1.0170 (mse=0.3671 geo=1.2997) val=1.0823 | lr=9.29e-05
+Epoch 363/500 | train=1.0158 (mse=0.3672 geo=1.2972) val=1.0906 | lr=9.16e-05
+Epoch 364/500 | train=1.0201 (mse=0.3656 geo=1.3090) val=1.0877 | lr=9.04e-05
+Epoch 365/500 | train=1.0102 (mse=0.3637 geo=1.2931) val=1.0622 | lr=8.92e-05
+Epoch 366/500 | train=1.0143 (mse=0.3674 geo=1.2939) val=1.0736 | lr=8.79e-05
+Epoch 367/500 | train=1.0174 (mse=0.3669 geo=1.3009) val=1.0758 | lr=8.67e-05
+Epoch 368/500 | train=1.0085 (mse=0.3610 geo=1.2950) val=1.0702 | lr=8.55e-05
+Epoch 369/500 | train=1.0087 (mse=0.3584 geo=1.3005) val=1.0665 | lr=8.43e-05
+Epoch 370/500 | train=1.0128 (mse=0.3619 geo=1.3018) val=1.0698 | lr=8.31e-05
+Epoch 371/500 | train=1.0159 (mse=0.3626 geo=1.3067) val=1.0767 | lr=8.19e-05
+Epoch 372/500 | train=1.0097 (mse=0.3598 geo=1.2998) val=1.0867 | lr=8.07e-05
+Epoch 373/500 | train=1.0136 (mse=0.3645 geo=1.2981) val=1.0747 | lr=7.96e-05
+Epoch 374/500 | train=1.0095 (mse=0.3574 geo=1.3042) val=1.0700 | lr=7.84e-05
+Epoch 375/500 | train=1.0115 (mse=0.3631 geo=1.2967) val=1.0760 | lr=7.72e-05
+Epoch 376/500 | train=1.0106 (mse=0.3596 geo=1.3020) val=1.0759 | lr=7.61e-05
+Epoch 377/500 | train=1.0066 (mse=0.3573 geo=1.2985) val=1.0820 | lr=7.49e-05
+Epoch 378/500 | train=1.0059 (mse=0.3579 geo=1.2961) val=1.0810 | lr=7.38e-05
+Epoch 379/500 | train=1.0046 (mse=0.3563 geo=1.2966) val=1.0946 | lr=7.27e-05
+Epoch 380/500 | train=1.0062 (mse=0.3588 geo=1.2948) val=1.0811 | lr=7.15e-05
+Epoch 381/500 | train=1.0067 (mse=0.3556 geo=1.3023) val=1.0698 | lr=7.04e-05
+Epoch 382/500 | train=1.0059 (mse=0.3626 geo=1.2864) val=1.0658 | lr=6.93e-05
+Epoch 383/500 | train=1.0072 (mse=0.3551 geo=1.3044) val=1.0959 | lr=6.82e-05
+Epoch 384/500 | train=1.0031 (mse=0.3570 geo=1.2923) val=1.0868 | lr=6.71e-05
+Epoch 385/500 | train=1.0081 (mse=0.3545 geo=1.3070) val=1.0774 | lr=6.60e-05
+Epoch 386/500 | train=0.9995 (mse=0.3565 geo=1.2858) val=1.0923 | lr=6.49e-05
+Epoch 387/500 | train=1.0016 (mse=0.3560 geo=1.2913) val=1.0829 | lr=6.39e-05
+Epoch 388/500 | train=1.0056 (mse=0.3554 geo=1.3004) val=1.0546 | lr=6.28e-05
+Epoch 389/500 | train=1.0109 (mse=0.3595 geo=1.3027) val=1.0956 | lr=6.17e-05
+Epoch 390/500 | train=1.0010 (mse=0.3534 geo=1.2952) val=1.0838 | lr=6.07e-05
+Epoch 391/500 | train=1.0078 (mse=0.3574 geo=1.3010) val=1.0936 | lr=5.96e-05
+Epoch 392/500 | train=0.9995 (mse=0.3511 geo=1.2968) val=1.0914 | lr=5.86e-05
+Epoch 393/500 | train=1.0018 (mse=0.3552 geo=1.2933) val=1.0775 | lr=5.76e-05
+Epoch 394/500 | train=0.9993 (mse=0.3537 geo=1.2911) val=1.0872 | lr=5.66e-05
+Epoch 395/500 | train=1.0010 (mse=0.3560 geo=1.2900) val=1.0646 | lr=5.55e-05
+Epoch 396/500 | train=1.0033 (mse=0.3526 geo=1.3015) val=1.0892 | lr=5.45e-05
+Epoch 397/500 | train=1.0005 (mse=0.3520 geo=1.2971) val=1.0840 | lr=5.35e-05
+Epoch 398/500 | train=1.0033 (mse=0.3534 geo=1.2996) val=1.0978 | lr=5.26e-05
+Epoch 399/500 | train=0.9952 (mse=0.3511 geo=1.2882) val=1.0718 | lr=5.16e-05
+Epoch 400/500 | train=0.9937 (mse=0.3507 geo=1.2861) val=1.0829 | lr=5.06e-05
+
+[GeoDiff Eval @ Epoch 400] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 400] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.8%  (med: 100.0%)
+  MAT-R (mean): 0.1623 Å  (med: 0.1275 Å)
+  MAT-P (mean): 0.2249 Å  (med: 0.2559 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1623 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 401/500 | train=1.0017 (mse=0.3532 geo=1.2969) val=1.0826 | lr=4.96e-05
+Epoch 402/500 | train=0.9986 (mse=0.3511 geo=1.2950) val=1.0763 | lr=4.87e-05
+Epoch 403/500 | train=0.9980 (mse=0.3496 geo=1.2968) val=1.0803 | lr=4.77e-05
+Epoch 404/500 | train=0.9980 (mse=0.3505 geo=1.2949) val=1.0901 | lr=4.68e-05
+Epoch 405/500 | train=1.0057 (mse=0.3522 geo=1.3071) val=1.0778 | lr=4.59e-05
+Epoch 406/500 | train=1.0025 (mse=0.3508 geo=1.3034) val=1.0956 | lr=4.50e-05
+Epoch 407/500 | train=0.9993 (mse=0.3505 geo=1.2977) val=1.0804 | lr=4.40e-05
+Epoch 408/500 | train=0.9985 (mse=0.3465 geo=1.3041) val=1.0869 | lr=4.31e-05
+Epoch 409/500 | train=0.9988 (mse=0.3475 geo=1.3025) val=1.0941 | lr=4.22e-05
+Epoch 410/500 | train=0.9913 (mse=0.3477 geo=1.2872) val=1.0959 | lr=4.14e-05
+Epoch 411/500 | train=0.9940 (mse=0.3475 geo=1.2929) val=1.0844 | lr=4.05e-05
+Epoch 412/500 | train=0.9929 (mse=0.3464 geo=1.2928) val=1.0882 | lr=3.96e-05
+Epoch 413/500 | train=0.9907 (mse=0.3444 geo=1.2925) val=1.0695 | lr=3.87e-05
+Epoch 414/500 | train=0.9949 (mse=0.3495 geo=1.2908) val=1.0734 | lr=3.79e-05
+Epoch 415/500 | train=0.9945 (mse=0.3465 geo=1.2960) val=1.0786 | lr=3.70e-05
+Epoch 416/500 | train=0.9954 (mse=0.3480 geo=1.2947) val=1.0731 | lr=3.62e-05
+Epoch 417/500 | train=0.9999 (mse=0.3486 geo=1.3025) val=1.0811 | lr=3.54e-05
+Epoch 418/500 | train=0.9890 (mse=0.3451 geo=1.2877) val=1.0723 | lr=3.46e-05
+Epoch 419/500 | train=0.9881 (mse=0.3423 geo=1.2916) val=1.0824 | lr=3.38e-05
+Epoch 420/500 | train=0.9990 (mse=0.3498 geo=1.2985) val=1.0841 | lr=3.30e-05
+Epoch 421/500 | train=1.0002 (mse=0.3490 geo=1.3024) val=1.0719 | lr=3.22e-05
+Epoch 422/500 | train=0.9893 (mse=0.3402 geo=1.2981) val=1.0884 | lr=3.14e-05
+Epoch 423/500 | train=0.9953 (mse=0.3474 geo=1.2959) val=1.0990 | lr=3.06e-05
+Epoch 424/500 | train=0.9951 (mse=0.3435 geo=1.3032) val=1.0666 | lr=2.99e-05
+Epoch 425/500 | train=0.9987 (mse=0.3453 geo=1.3068) val=1.0808 | lr=2.91e-05
+Epoch 426/500 | train=0.9870 (mse=0.3409 geo=1.2922) val=1.0759 | lr=2.84e-05
+Epoch 427/500 | train=0.9891 (mse=0.3412 geo=1.2958) val=1.0945 | lr=2.76e-05
+Epoch 428/500 | train=0.9985 (mse=0.3473 geo=1.3024) val=1.0853 | lr=2.69e-05
+Epoch 429/500 | train=0.9872 (mse=0.3421 geo=1.2901) val=1.1033 | lr=2.62e-05
+Epoch 430/500 | train=0.9968 (mse=0.3431 geo=1.3073) val=1.0810 | lr=2.55e-05
+Epoch 431/500 | train=0.9902 (mse=0.3438 geo=1.2928) val=1.0694 | lr=2.48e-05
+Epoch 432/500 | train=0.9873 (mse=0.3422 geo=1.2903) val=1.0838 | lr=2.41e-05
+Epoch 433/500 | train=0.9906 (mse=0.3429 geo=1.2955) val=1.0841 | lr=2.34e-05
+Epoch 434/500 | train=0.9833 (mse=0.3420 geo=1.2826) val=1.0865 | lr=2.27e-05
+Epoch 435/500 | train=0.9885 (mse=0.3456 geo=1.2858) val=1.0847 | lr=2.21e-05
+Epoch 436/500 | train=0.9988 (mse=0.3448 geo=1.3080) val=1.0700 | lr=2.14e-05
+Epoch 437/500 | train=0.9932 (mse=0.3443 geo=1.2979) val=1.0823 | lr=2.08e-05
+Epoch 438/500 | train=0.9922 (mse=0.3422 geo=1.3001) val=1.0723 | lr=2.01e-05
+Epoch 439/500 | train=0.9962 (mse=0.3410 geo=1.3104) val=1.0979 | lr=1.95e-05
+Epoch 440/500 | train=0.9921 (mse=0.3414 geo=1.3014) val=1.0696 | lr=1.89e-05
+Epoch 441/500 | train=0.9895 (mse=0.3424 geo=1.2944) val=1.1076 | lr=1.83e-05
+Epoch 442/500 | train=0.9879 (mse=0.3416 geo=1.2926) val=1.0789 | lr=1.77e-05
+Epoch 443/500 | train=0.9865 (mse=0.3418 geo=1.2894) val=1.0942 | lr=1.71e-05
+Epoch 444/500 | train=0.9854 (mse=0.3363 geo=1.2981) val=1.0919 | lr=1.65e-05
+Epoch 445/500 | train=0.9914 (mse=0.3422 geo=1.2985) val=1.0815 | lr=1.59e-05
+Epoch 446/500 | train=0.9896 (mse=0.3418 geo=1.2957) val=1.0832 | lr=1.54e-05
+Epoch 447/500 | train=0.9905 (mse=0.3380 geo=1.3050) val=1.0762 | lr=1.48e-05
+Epoch 448/500 | train=0.9886 (mse=0.3386 geo=1.3001) val=1.0696 | lr=1.43e-05
+Epoch 449/500 | train=0.9878 (mse=0.3421 geo=1.2913) val=1.1051 | lr=1.38e-05
+Epoch 450/500 | train=0.9911 (mse=0.3407 geo=1.3007) val=1.0954 | lr=1.32e-05
+
+[GeoDiff Eval @ Epoch 450] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 450] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.8%  (med: 100.0%)
+  MAT-R (mean): 0.1635 Å  (med: 0.1302 Å)
+  MAT-P (mean): 0.2249 Å  (med: 0.2533 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+Epoch 451/500 | train=0.9907 (mse=0.3418 geo=1.2977) val=1.0682 | lr=1.27e-05
+Epoch 452/500 | train=0.9853 (mse=0.3380 geo=1.2945) val=1.0709 | lr=1.22e-05
+Epoch 453/500 | train=0.9884 (mse=0.3398 geo=1.2973) val=1.0816 | lr=1.17e-05
+Epoch 454/500 | train=0.9899 (mse=0.3397 geo=1.3005) val=1.1055 | lr=1.13e-05
+Epoch 455/500 | train=0.9904 (mse=0.3394 geo=1.3021) val=1.0897 | lr=1.08e-05
+Epoch 456/500 | train=0.9864 (mse=0.3386 geo=1.2956) val=1.0786 | lr=1.03e-05
+Epoch 457/500 | train=0.9883 (mse=0.3378 geo=1.3010) val=1.0839 | lr=9.88e-06
+Epoch 458/500 | train=0.9910 (mse=0.3435 geo=1.2949) val=1.0906 | lr=9.44e-06
+Epoch 459/500 | train=0.9889 (mse=0.3390 geo=1.2996) val=1.0863 | lr=9.01e-06
+Epoch 460/500 | train=0.9921 (mse=0.3406 geo=1.3029) val=1.0847 | lr=8.59e-06
+Epoch 461/500 | train=0.9875 (mse=0.3370 geo=1.3008) val=1.0892 | lr=8.18e-06
+Epoch 462/500 | train=0.9831 (mse=0.3353 geo=1.2957) val=1.0917 | lr=7.77e-06
+Epoch 463/500 | train=0.9931 (mse=0.3422 geo=1.3018) val=1.0672 | lr=7.38e-06
+Epoch 464/500 | train=0.9862 (mse=0.3416 geo=1.2892) val=1.0754 | lr=7.00e-06
+Epoch 465/500 | train=0.9911 (mse=0.3389 geo=1.3044) val=1.0965 | lr=6.63e-06
+Epoch 466/500 | train=0.9827 (mse=0.3364 geo=1.2924) val=1.0839 | lr=6.27e-06
+Epoch 467/500 | train=0.9928 (mse=0.3390 geo=1.3076) val=1.0771 | lr=5.92e-06
+Epoch 468/500 | train=0.9846 (mse=0.3362 geo=1.2967) val=1.0928 | lr=5.57e-06
+Epoch 469/500 | train=0.9873 (mse=0.3377 geo=1.2993) val=1.0914 | lr=5.24e-06
+Epoch 470/500 | train=0.9885 (mse=0.3399 geo=1.2971) val=1.0697 | lr=5.00e-06
+Epoch 471/500 | train=0.9869 (mse=0.3358 geo=1.3022) val=1.0912 | lr=5.00e-06
+Epoch 472/500 | train=0.9876 (mse=0.3404 geo=1.2945) val=1.0871 | lr=5.00e-06
+Epoch 473/500 | train=0.9889 (mse=0.3424 geo=1.2931) val=1.0713 | lr=5.00e-06
+Epoch 474/500 | train=0.9880 (mse=0.3340 geo=1.3079) val=1.0950 | lr=5.00e-06
+Epoch 475/500 | train=0.9904 (mse=0.3373 geo=1.3061) val=1.0807 | lr=5.00e-06
+Epoch 476/500 | train=0.9769 (mse=0.3338 geo=1.2862) val=1.0740 | lr=5.00e-06
+Epoch 477/500 | train=0.9838 (mse=0.3369 geo=1.2937) val=1.0951 | lr=5.00e-06
+Epoch 478/500 | train=0.9918 (mse=0.3374 geo=1.3087) val=1.0811 | lr=5.00e-06
+Epoch 479/500 | train=0.9809 (mse=0.3322 geo=1.2974) val=1.0714 | lr=5.00e-06
+Epoch 480/500 | train=0.9905 (mse=0.3396 geo=1.3018) val=1.0695 | lr=5.00e-06
+Epoch 481/500 | train=0.9862 (mse=0.3373 geo=1.2978) val=1.0692 | lr=5.00e-06
+Epoch 482/500 | train=0.9828 (mse=0.3326 geo=1.3004) val=1.0950 | lr=5.00e-06
+Epoch 483/500 | train=0.9848 (mse=0.3364 geo=1.2967) val=1.0898 | lr=5.00e-06
+Epoch 484/500 | train=0.9863 (mse=0.3367 geo=1.2991) val=1.0829 | lr=5.00e-06
+Epoch 485/500 | train=0.9920 (mse=0.3393 geo=1.3053) val=1.0864 | lr=5.00e-06
+Epoch 486/500 | train=0.9784 (mse=0.3347 geo=1.2874) val=1.0715 | lr=5.00e-06
+Epoch 487/500 | train=0.9875 (mse=0.3375 geo=1.3000) val=1.0963 | lr=5.00e-06
+Epoch 488/500 | train=0.9856 (mse=0.3401 geo=1.2910) val=1.1072 | lr=5.00e-06
+Epoch 489/500 | train=0.9884 (mse=0.3426 geo=1.2917) val=1.0956 | lr=5.00e-06
+Epoch 490/500 | train=0.9794 (mse=0.3379 geo=1.2830) val=1.0834 | lr=5.00e-06
+Epoch 491/500 | train=0.9854 (mse=0.3373 geo=1.2961) val=1.1027 | lr=5.00e-06
+Epoch 492/500 | train=0.9832 (mse=0.3376 geo=1.2912) val=1.0874 | lr=5.00e-06
+Epoch 493/500 | train=0.9807 (mse=0.3352 geo=1.2909) val=1.0935 | lr=5.00e-06
+Epoch 494/500 | train=0.9837 (mse=0.3378 geo=1.2917) val=1.0927 | lr=5.00e-06
+Epoch 495/500 | train=0.9853 (mse=0.3360 geo=1.2987) val=1.0824 | lr=5.00e-06
+Epoch 496/500 | train=0.9869 (mse=0.3398 geo=1.2941) val=1.0864 | lr=5.00e-06
+Epoch 497/500 | train=0.9904 (mse=0.3372 geo=1.3065) val=1.0768 | lr=5.00e-06
+Epoch 498/500 | train=0.9858 (mse=0.3398 geo=1.2921) val=1.0740 | lr=5.00e-06
+Epoch 499/500 | train=0.9833 (mse=0.3333 geo=1.3000) val=1.0757 | lr=5.00e-06
+Epoch 500/500 | train=0.9824 (mse=0.3364 geo=1.2919) val=1.0739 | lr=5.00e-06
+
+[GeoDiff Eval @ Epoch 500] Generating 10 conformers × 300 mols...
+
+── GeoDiff COV-MAT Eval [Epoch 500] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.9%  (med: 100.0%)
+  MAT-R (mean): 0.1596 Å  (med: 0.1270 Å)
+  MAT-P (mean): 0.2255 Å  (med: 0.2539 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+  ✓ New best MAT-R: 0.1596 Å
+Results written to: /scratch/nishanth.r/nextmol_experiment/mol_next_gen/autoresearch/results_geodiff.tsv
+
+Loaded best checkpoint (epoch 500)
+
+Running final GeoDiff COV-MAT evaluation...
+COV-MAT Eval: 100%|██████████| 300/300 [13:10<00:00,  2.63s/it]
+
+── GeoDiff COV-MAT Eval [FINAL — exp_G_heavy_atom_sota_ddp] ────────────────────────────────────────
+  n_evaluated : 300
+  COV-R@0.5Å  :   99.7%  (med: 100.0%)
+  COV-P@0.5Å  :   93.3%  (med: 100.0%)
+  MAT-R (mean): 0.1604 Å  (med: 0.1271 Å)
+  MAT-P (mean): 0.2264 Å  (med: 0.2539 Å)
+
+  SOTA Reference (QM9 heavy-atom):
+    GeoDiff  (ICML 2022):  COV-R=71.0%  MAT-R=0.297 Å
+    GeoMol   (NeurIPS 2021): COV-R=71.5% MAT-R=0.225 Å
+    TorDiff  (NeurIPS 2022): COV-R=73.2% MAT-R=0.219 Å
+
+
+=================================================================
+FINAL RESULTS — exp_G_heavy_atom_sota_ddp
+=================================================================
+  COV-R@0.5Å : 99.7%  (SOTA GeoDiff: 71.0%)
+  MAT-R      : 0.1604 Å  (SOTA GeoDiff: 0.297 Å)
+  COV-P@0.5Å : 93.3%
+  MAT-P      : 0.2264 Å
+  Training   : 7.7h | Peak VRAM/GPU: 348 MB
+  Parameters : 8.28M | World size: 2
